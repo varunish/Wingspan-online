@@ -1,4 +1,8 @@
+import express from "express";
+import { createServer } from "http";
 import { Server } from "socket.io";
+import path from "path";
+import { fileURLToPath } from "url";
 import { Game } from "./engine/Game.js";
 import { GainFood } from "./engine/Actions/GainFood.js";
 import { LayEggs } from "./engine/Actions/LayEggs.js";
@@ -8,7 +12,27 @@ import { ExchangeResource } from "./engine/Actions/ExchangeResource.js";
 import { ConvertFood } from "./engine/Actions/ConvertFood.js";
 import { ScoringEngine } from "./engine/ScoringEngine.js";
 
-const io = new Server(3000, {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+const httpServer = createServer(app);
+const PORT = process.env.PORT || 3000;
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+// Health check endpoint for Render
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
+// All other GET requests serve the React app
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+});
+
+const io = new Server(httpServer, {
   cors: { origin: "*" }
 });
 
@@ -326,4 +350,6 @@ io.on("connection", socket => {
   });
 });
 
-console.log("Wingspan server running on http://localhost:3000");
+httpServer.listen(PORT, () => {
+  console.log(`Wingspan server running on port ${PORT}`);
+});

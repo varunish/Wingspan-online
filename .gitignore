@@ -4,6 +4,8 @@ client/node_modules/
 
 # Build outputs
 client/dist/
+dist/
+build/
 *.log
 
 # Environment files
