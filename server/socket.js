@@ -27,8 +27,8 @@ app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
-// All other GET requests serve the React app
-app.get("*", (req, res) => {
+// All other GET requests serve the React app (Express 5.x compatible)
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
 
