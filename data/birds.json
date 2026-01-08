@@ -328,9 +328,7 @@
       "grassland",
       "wetland"
     ],
-    "foodCost": [
-      "invertebrate"
-    ],
+    "foodCost": [],
     "points": 1,
     "nestType": "cavity",
     "eggCapacity": 1,
@@ -365,9 +363,7 @@
     "habitats": [
       "forest"
     ],
-    "foodCost": [
-      "invertebrate"
-    ],
+    "foodCost": [],
     "points": 2,
     "nestType": "cavity",
     "eggCapacity": 1,
