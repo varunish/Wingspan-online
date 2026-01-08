@@ -4,12 +4,14 @@ import { useToast } from "../hooks/useToast.js";
 import { ToastContainer } from "../components/Toast.jsx";
 import { Tooltip } from "../components/Tooltip.jsx";
 import { FoodConverter } from "./FoodConverter.jsx";
+import { FoodToken } from "../components/FoodToken.jsx";
 import {
   validateGainFood,
   validatePlayBird,
   validateLayEggs,
   validateDrawCards
 } from "../utils/actionValidation.js";
+import "./ActionPanel.css";
 
 export function ActionPanel({ state, myPlayerId }) {
   const me = state.players.find(p => p.id === myPlayerId);
@@ -102,51 +104,49 @@ export function ActionPanel({ state, myPlayerId }) {
           onClose={() => setShowFoodConverter(false)}
         />
       )}
-      <div className="actions" data-highlight="ACTION_PANEL">
-        <h3>Actions</h3>
-        {!isMyTurn && <div>Waiting for your turn…</div>}
+      <div className="action-panel" data-highlight="ACTION_PANEL">
+        <h3><span className="action-section-icon">⚡</span> Actions</h3>
+        {!isMyTurn && <div className="waiting-message">⏳ Waiting for your turn…</div>}
         {isMyTurn && (
           <>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <div>Action cubes: {me?.actionCubes ?? 0}</div>
+            <div className="action-cubes-header">
+              <div className="action-cubes-count">
+                <span>🎲 Action cubes:</span>
+                <strong>{me?.actionCubes ?? 0}</strong>
+              </div>
               <button
                 onClick={() => setShowFoodConverter(true)}
-                style={{
-                  padding: "4px 12px",
-                  fontSize: "0.85em",
-                  backgroundColor: "#FFA726",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: 4,
-                  cursor: "pointer"
-                }}
+                className="action-button action-button-small action-button-secondary"
               >
                 🔄 Convert Food (2:1)
               </button>
             </div>
 
           {/* Gain Food */}
-          <div style={{ marginTop: 8 }}>
-            <Tooltip text="Select food from the dice tray equal to your forest strength (1 + number of birds in forest)">
-              <strong>Gain Food (Forest strength {forestStrength}) ℹ️</strong>
-            </Tooltip>
-            <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+          <div className="action-section">
+            <div className="action-section-header">
+              <span className="action-section-icon">🌲</span>
+              <Tooltip text="Select food from the dice tray equal to your forest strength (1 + number of birds in forest)">
+                <span>Gain Food (Forest strength {forestStrength}) ℹ️</span>
+              </Tooltip>
+            </div>
+            <div className="food-dice-grid">
               {(state.diceTray || []).map((f, idx) => (
-                <button
+                <div
                   key={idx}
-                  style={{
-                    border: foodSelection.includes(f + ":" + idx)
-                      ? "2px solid green"
-                      : undefined
-                  }}
-                  onClick={() => toggleFood(idx, f)}
-                  disabled={!canAct}
+                  className={`food-die ${foodSelection.includes(f + ":" + idx) ? 'selected' : ''}`}
+                  onClick={() => !canAct ? null : toggleFood(idx, f)}
+                  style={{ opacity: canAct ? 1 : 0.5, cursor: canAct ? 'pointer' : 'not-allowed' }}
                 >
-                  {f}
-                </button>
+                  <FoodToken type={f} size={40} />
+                </div>
               ))}
             </div>
+            <div className="selection-counter">
+              Selected: {foodSelection.length} / {forestStrength}
+            </div>
             <button
+              className="action-button"
               disabled={
                 !canAct || foodSelection.length !== forestStrength
               }
@@ -171,33 +171,42 @@ export function ActionPanel({ state, myPlayerId }) {
                 setFoodSelection([]);
               }}
             >
-              Confirm Gain Food
+              ✓ Confirm Gain Food
             </button>
           </div>
 
           {/* Lay Eggs */}
-          <div style={{ marginTop: 12 }}>
-            <Tooltip text="Lay eggs on your birds up to your grassland strength (1 + number of birds in grassland). Each bird has an egg capacity limit.">
-              <strong>Lay Eggs (Grassland strength {grassStrength}) ℹ️</strong>
-            </Tooltip>
-            <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          <div className="action-section">
+            <div className="action-section-header">
+              <span className="action-section-icon">🥚</span>
+              <Tooltip text="Lay eggs on your birds up to your grassland strength (1 + number of birds in grassland). Each bird has an egg capacity limit.">
+                <span>Lay Eggs (Grassland strength {grassStrength}) ℹ️</span>
+              </Tooltip>
+            </div>
+            <div className="bird-selection-grid">
               {allBirdSlots.map((b, idx) => (
                 <button
                   key={b.instanceId || `${b.id}-${idx}`}
+                  className="bird-select-button"
                   onClick={() => addEggTarget(b.id)}
                   disabled={!canAct || eggTargets.length >= grassStrength}
                 >
-                  + Egg on {b.name}
+                  + {b.name}
                 </button>
               ))}
             </div>
-            <div>
-              Selected: {eggTargets.length}/{grassStrength}
+            <div className="selection-counter">
+              Selected: {eggTargets.length} / {grassStrength}
             </div>
-            <button onClick={resetEggTargets} disabled={!eggTargets.length}>
-              Clear Egg Targets
+            <button 
+              className="action-button action-button-danger action-button-small" 
+              onClick={resetEggTargets} 
+              disabled={!eggTargets.length}
+            >
+              ✕ Clear Selection
             </button>
             <button
+              className="action-button"
               disabled={
                 !canAct || eggTargets.length !== grassStrength
               }
@@ -216,19 +225,22 @@ export function ActionPanel({ state, myPlayerId }) {
                 setEggTargets([]);
               }}
             >
-              Confirm Lay Eggs
+              ✓ Confirm Lay Eggs
             </button>
           </div>
 
           {/* Draw Cards */}
-          <div style={{ marginTop: 12 }}>
-            <Tooltip text="Draw cards from the deck or face-up tray equal to your wetlands strength (1 + number of birds in wetlands). Hand limit is 8 cards.">
-              <strong>Draw Cards (Wetlands strength {wetlandStrength}) ℹ️</strong>
-            </Tooltip>
+          <div className="action-section">
+            <div className="action-section-header">
+              <span className="action-section-icon">💧</span>
+              <Tooltip text="Draw cards from the deck or face-up tray equal to your wetlands strength (1 + number of birds in wetlands). Hand limit is 8 cards.">
+                <span>Draw Cards (Wetlands strength {wetlandStrength}) ℹ️</span>
+              </Tooltip>
+            </div>
             
             {/* Draw mode selection */}
-            <div style={{ marginTop: 8, marginBottom: 8 }}>
-              <label style={{ marginRight: 16 }}>
+            <div className="draw-mode-toggle">
+              <label>
                 <input
                   type="radio"
                   value="deck"
@@ -239,7 +251,7 @@ export function ActionPanel({ state, myPlayerId }) {
                   }}
                   disabled={!canAct}
                 />
-                {" "}Draw from deck
+                {" "}📚 Draw from deck
               </label>
               <label>
                 <input
@@ -252,7 +264,7 @@ export function ActionPanel({ state, myPlayerId }) {
                   }}
                   disabled={!canAct}
                 />
-                {" "}Select from face-up tray
+                {" "}🃏 Select from face-up tray
               </label>
             </div>
 

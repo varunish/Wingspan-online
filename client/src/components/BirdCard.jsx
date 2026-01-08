@@ -2,6 +2,7 @@ import React from "react";
 import { FoodToken } from "./FoodToken.jsx";
 import { EggCounter } from "./EggToken.jsx";
 import { Tooltip } from "./Tooltip.jsx";
+import { CardZoom } from "./CardZoom.jsx";
 
 const HABITAT_COLORS = {
   forest: "#2E7D32",
@@ -59,63 +60,65 @@ export function BirdCard({ bird, onClick, selected, compact = false, showEggs = 
   // Try to show image version first
   if (imageExists) {
     return (
-      <div
-        onClick={onClick}
-        style={{
-          width: 180,
-          height: 250,
-          borderRadius: 12,
-          border: selected ? "4px solid #FFD700" : "3px solid #333",
-          boxShadow: selected
-            ? "0 6px 12px rgba(255,215,0,0.6)"
-            : "0 4px 8px rgba(0,0,0,0.3)",
-          cursor: onClick ? "pointer" : "default",
-          overflow: "hidden",
-          transition: "all 0.2s ease",
-          transform: selected ? "scale(1.05)" : "scale(1)",
-          position: "relative"
-        }}
-      >
-        <img
-          src={cardImagePath}
-          alt={bird.name}
+      <CardZoom cardImagePath={cardImagePath}>
+        <div
+          onClick={onClick}
           style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'contain',
-            display: imageLoaded ? 'block' : 'none'
-          }}
-          onError={() => setImageExists(false)}
-          onLoad={() => setImageLoaded(true)}
-        />
-        {!imageLoaded && (
-          <div style={{
-            width: '100%',
-            height: '100%',
-            backgroundColor: habitatColor,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff',
-            fontSize: '0.9em'
-          }}>Loading...</div>
-        )}
-        {showEggs && bird.eggs > 0 && imageLoaded && (
-          <div style={{
-            position: 'absolute',
-            bottom: 8,
-            right: 8,
-            backgroundColor: 'rgba(255,255,255,0.95)',
-            padding: '4px 8px',
+            width: 200,
+            height: 280,
             borderRadius: 12,
-            fontSize: '0.85em',
-            fontWeight: 'bold',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
-          }}>
-            <EggCounter current={bird.eggs || 0} max={bird.eggCapacity || 6} size={16} />
-          </div>
-        )}
-      </div>
+            border: selected ? "4px solid #FFD700" : "3px solid #333",
+            boxShadow: selected
+              ? "0 6px 12px rgba(255,215,0,0.6)"
+              : "0 4px 8px rgba(0,0,0,0.3)",
+            cursor: onClick ? "pointer" : "default",
+            overflow: "hidden",
+            transition: "all 0.2s ease",
+            transform: selected ? "scale(1.05)" : "scale(1)",
+            position: "relative"
+          }}
+        >
+          <img
+            src={cardImagePath}
+            alt={bird.name}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
+              display: imageLoaded ? 'block' : 'none'
+            }}
+            onError={() => setImageExists(false)}
+            onLoad={() => setImageLoaded(true)}
+          />
+          {!imageLoaded && (
+            <div style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: habitatColor,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fff',
+              fontSize: '0.9em'
+            }}>Loading...</div>
+          )}
+          {showEggs && bird.eggs > 0 && imageLoaded && (
+            <div style={{
+              position: 'absolute',
+              bottom: 8,
+              right: 8,
+              backgroundColor: 'rgba(255,255,255,0.95)',
+              padding: '4px 8px',
+              borderRadius: 12,
+              fontSize: '0.85em',
+              fontWeight: 'bold',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
+            }}>
+              <EggCounter current={bird.eggs || 0} max={bird.eggCapacity || 6} size={16} />
+            </div>
+          )}
+        </div>
+      </CardZoom>
     );
   }
 

@@ -1,0 +1,301 @@
+.action-panel {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
+  border: 2px solid rgba(255,255,255,0.9);
+}
+
+.action-panel h3 {
+  margin: 0 0 16px 0;
+  font-size: 1.5em;
+  color: #2c3e50;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-cubes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 10px rgba(102,126,234,0.3);
+}
+
+.action-cubes-count {
+  font-size: 1.1em;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-section {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.08);
+  transition: all 0.2s ease;
+}
+
+.action-section:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  transform: translateY(-1px);
+}
+
+.action-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 1em;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.action-section-icon {
+  font-size: 1.3em;
+}
+
+.action-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(102,126,234,0.3);
+  margin-top: 8px;
+}
+
+.action-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102,126,234,0.4);
+}
+
+.action-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.action-button:disabled {
+  background: linear-gradient(135deg, #a0a0a0 0%, #888 100%);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.action-button-secondary {
+  background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
+  box-shadow: 0 2px 6px rgba(255,167,38,0.3);
+}
+
+.action-button-secondary:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(255,167,38,0.4);
+}
+
+.action-button-danger {
+  background: linear-gradient(135deg, #ef5350 0%, #e53935 100%);
+  box-shadow: 0 2px 6px rgba(239,83,80,0.3);
+}
+
+.action-button-danger:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(239,83,80,0.4);
+}
+
+.action-button-small {
+  padding: 6px 12px;
+  font-size: 0.85em;
+}
+
+.food-dice-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.food-die {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  position: relative;
+  padding: 4px;
+}
+
+.food-die.selected {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 3px #4caf50;
+}
+
+.food-die:hover:not(:disabled) {
+  transform: scale(1.15);
+}
+
+.bird-selection-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.bird-select-button {
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.bird-select-button:hover:not(:disabled) {
+  border-color: #667eea;
+  background: #f0f3ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(102,126,234,0.2);
+}
+
+.bird-select-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bird-select-button.selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+}
+
+.selection-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #495057;
+  margin: 8px 0;
+}
+
+.wild-food-panel {
+  margin-top: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+  border: 2px solid #ffd54f;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(255,193,7,0.2);
+}
+
+.wild-food-panel h4 {
+  margin: 0 0 12px 0;
+  color: #f57f17;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wild-food-choice {
+  margin-bottom: 12px;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #ffe082;
+}
+
+.wild-food-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.waiting-message {
+  padding: 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border-radius: 12px;
+  color: #1565c0;
+  font-size: 1.1em;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(21,101,192,0.1);
+}
+
+.draw-mode-toggle {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 12px 0;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.draw-mode-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.draw-mode-toggle input[type="radio"] {
+  cursor: pointer;
+}
+
+.draw-mode-toggle label:hover {
+  background: #e9ecef;
+}
+
+.habitat-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.habitat-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95em;
+  font-weight: 500;
+}
+
+.habitat-option:hover {
+  border-color: #667eea;
+  background: #f0f3ff;
+  transform: translateX(4px);
+}
+
+.habitat-option.selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+}
+
+.habitat-option.forest { border-left: 4px solid #2E7D32; }
+.habitat-option.grassland { border-left: 4px solid #F9A825; }
+.habitat-option.wetlands { border-left: 4px solid #1976D2; }
