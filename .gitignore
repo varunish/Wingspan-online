@@ -26,7 +26,7 @@ Thumbs.db
 # Large asset sources (keep only processed assets in client/public/assets/)
 Wingspan Assets/
 temp_extracted/
-assets/
+/assets/
 
 # Large text files (extracted for reference, not needed in repo)
 wingspan_appendix_full_text.txt
