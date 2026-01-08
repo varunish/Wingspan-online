@@ -1,0 +1,42 @@
+[
+  {
+    "id": "bonus-1",
+    "name": "Cartographer",
+    "description": "Score 1 point for each bird in the forest habitat"
+  },
+  {
+    "id": "bonus-2",
+    "name": "Egg Collector",
+    "description": "Score 1 point for every 2 eggs you have"
+  },
+  {
+    "id": "bonus-3",
+    "name": "Wetland Specialist",
+    "description": "Score 1 point for each bird in the wetlands habitat"
+  },
+  {
+    "id": "bonus-4",
+    "name": "Grassland Guardian",
+    "description": "Score 1 point for each bird in the grassland habitat"
+  },
+  {
+    "id": "bonus-5",
+    "name": "Food Hoarder",
+    "description": "Score 1 point for every 3 food tokens cached on your birds"
+  },
+  {
+    "id": "bonus-6",
+    "name": "Platform Nester",
+    "description": "Score 3 points for each platform nest bird"
+  },
+  {
+    "id": "bonus-7",
+    "name": "Bowl Nester",
+    "description": "Score 3 points for each bowl nest bird"
+  },
+  {
+    "id": "bonus-8",
+    "name": "Ground Nester",
+    "description": "Score 3 points for each ground nest bird"
+  }
+]

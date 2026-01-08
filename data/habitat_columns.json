@@ -1,0 +1,36 @@
+{
+  "eggCosts": [0, 1, 1, 2, 2, 3],
+  "forest": {
+    "name": "Gain Food from Birdfeeder",
+    "benefits": [
+      { "strength": 1, "food": 1, "exchange": null },
+      { "strength": 2, "food": 1, "exchange": null },
+      { "strength": 3, "food": 1, "exchange": "egg→food" },
+      { "strength": 4, "food": 2, "exchange": null },
+      { "strength": 5, "food": 2, "exchange": "egg→food" },
+      { "strength": 6, "food": 3, "exchange": null }
+    ]
+  },
+  "grassland": {
+    "name": "Lay Eggs on Bird(s)",
+    "benefits": [
+      { "strength": 1, "eggs": 2, "exchange": null },
+      { "strength": 2, "eggs": 2, "exchange": null },
+      { "strength": 3, "eggs": 2, "exchange": "food→egg" },
+      { "strength": 4, "eggs": 3, "exchange": null },
+      { "strength": 5, "eggs": 3, "exchange": "food→egg" },
+      { "strength": 6, "eggs": 4, "exchange": null }
+    ]
+  },
+  "wetlands": {
+    "name": "Draw Bird Cards",
+    "benefits": [
+      { "strength": 1, "cards": 1, "exchange": null },
+      { "strength": 2, "cards": 1, "exchange": null },
+      { "strength": 3, "cards": 1, "exchange": "egg→card" },
+      { "strength": 4, "cards": 2, "exchange": null },
+      { "strength": 5, "cards": 2, "exchange": "egg→card" },
+      { "strength": 6, "cards": 3, "exchange": null }
+    ]
+  }
+}

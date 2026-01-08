@@ -1,0 +1,526 @@
+[
+  {
+    "id": "bird-1",
+    "name": "Mallard",
+    "habitats": ["wetlands"],
+    "foodCost": ["seed"],
+    "points": 3,
+    "nestType": "ground",
+    "eggCapacity": 5,
+    "wingspan": 95,
+    "power": {
+      "type": "WHEN_PLAYED",
+      "effect": "GAIN_FOOD",
+      "food": "fish"
+    }
+  },
+  {
+    "id": "bird-2",
+    "name": "Red-tailed Hawk",
+    "habitats": ["forest"],
+    "foodCost": ["rodent"],
+    "points": 5,
+    "eggCapacity": 2,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "GAIN_FOOD",
+      "food": "rodent",
+      "value": 1
+    }
+  },
+  {
+    "id": "bird-3",
+    "name": "American Robin",
+    "habitats": ["forest", "grassland"],
+    "foodCost": ["invertebrate"],
+    "points": 4,
+    "eggCapacity": 3,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "LAY_EGG"
+    }
+  },
+  {
+    "id": "bird-4",
+    "name": "Blue Jay",
+    "habitats": ["forest"],
+    "foodCost": ["seed", "fruit"],
+    "points": 3,
+    "eggCapacity": 3,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "CACHE_FOOD",
+      "food": "wild",
+      "value": 1
+    }
+  },
+  {
+    "id": "bird-5",
+    "name": "Northern Cardinal",
+    "habitats": ["forest"],
+    "foodCost": ["seed", "fruit"],
+    "points": 3,
+    "eggCapacity": 3,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "GAIN_FOOD",
+      "food": "seed",
+      "value": 1
+    }
+  },
+  {
+    "id": "bird-6",
+    "name": "Bald Eagle",
+    "habitats": ["wetlands"],
+    "foodCost": ["fish", "rodent"],
+    "points": 9,
+    "eggCapacity": 1
+  },
+  {
+    "id": "bird-7",
+    "name": "Great Blue Heron",
+    "habitats": ["wetlands"],
+    "foodCost": ["fish"],
+    "points": 5,
+    "eggCapacity": 2,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "DRAW_CARD",
+      "value": 1
+    }
+  },
+  {
+    "id": "bird-8",
+    "name": "Canada Goose",
+    "habitats": ["wetlands", "grassland"],
+    "foodCost": ["seed"],
+    "points": 4,
+    "eggCapacity": 3,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "DRAW_CARD",
+      "value": 1
+    }
+  },
+  {
+    "id": "bird-9",
+    "name": "Peregrine Falcon",
+    "habitats": ["grassland"],
+    "foodCost": ["rodent"],
+    "points": 8,
+    "eggCapacity": 1
+  },
+  {
+    "id": "bird-10",
+    "name": "Barn Owl",
+    "habitats": ["grassland"],
+    "foodCost": ["rodent"],
+    "points": 5,
+    "eggCapacity": 2
+  },
+  {
+    "id": "bird-11",
+    "name": "House Sparrow",
+    "habitats": ["grassland"],
+    "foodCost": ["seed"],
+    "points": 1,
+    "eggCapacity": 4,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "LAY_EGG",
+      "value": 1
+    }
+  },
+  {
+    "id": "bird-12",
+    "name": "American Crow",
+    "habitats": ["forest", "grassland"],
+    "foodCost": ["seed", "fruit"],
+    "points": 3,
+    "eggCapacity": 3
+  },
+  {
+    "id": "bird-13",
+    "name": "Wood Duck",
+    "habitats": ["wetlands", "forest"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 4,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-14",
+    "name": "Red-winged Blackbird",
+    "habitats": ["wetlands", "grassland"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-15",
+    "name": "Common Loon",
+    "habitats": ["wetlands"],
+    "foodCost": ["fish"],
+    "points": 6,
+    "eggCapacity": 2
+  },
+  {
+    "id": "bird-16",
+    "name": "Snowy Owl",
+    "habitats": ["grassland"],
+    "foodCost": ["rodent"],
+    "points": 7,
+    "eggCapacity": 2
+  },
+  {
+    "id": "bird-17",
+    "name": "Ruby-throated Hummingbird",
+    "habitats": ["forest"],
+    "foodCost": ["fruit", "nectar"],
+    "points": 1,
+    "eggCapacity": 2
+  },
+  {
+    "id": "bird-18",
+    "name": "Eastern Bluebird",
+    "habitats": ["grassland"],
+    "foodCost": ["invertebrate", "fruit"],
+    "points": 3,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-19",
+    "name": "Wild Turkey",
+    "habitats": ["forest", "grassland"],
+    "foodCost": ["seed", "fruit"],
+    "points": 4,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-20",
+    "name": "Belted Kingfisher",
+    "habitats": ["wetlands"],
+    "foodCost": ["fish"],
+    "points": 4,
+    "eggCapacity": 3
+  },
+  {
+    "id": "bird-21",
+    "name": "Pileated Woodpecker",
+    "habitats": ["forest"],
+    "foodCost": ["invertebrate", "fruit"],
+    "points": 5,
+    "eggCapacity": 2
+  },
+  {
+    "id": "bird-22",
+    "name": "Common Grackle",
+    "habitats": ["grassland"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-23",
+    "name": "Sandhill Crane",
+    "habitats": ["wetlands", "grassland"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 5,
+    "eggCapacity": 2
+  },
+  {
+    "id": "bird-24",
+    "name": "Great Horned Owl",
+    "habitats": ["forest"],
+    "foodCost": ["rodent"],
+    "points": 6,
+    "eggCapacity": 2
+  },
+  {
+    "id": "bird-25",
+    "name": "American Goldfinch",
+    "habitats": ["grassland"],
+    "foodCost": ["seed"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-26",
+    "name": "White-breasted Nuthatch",
+    "habitats": ["forest"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-27",
+    "name": "Brown Thrasher",
+    "habitats": ["forest", "grassland"],
+    "foodCost": ["invertebrate", "fruit"],
+    "points": 3,
+    "eggCapacity": 3
+  },
+  {
+    "id": "bird-28",
+    "name": "Double-crested Cormorant",
+    "habitats": ["wetlands"],
+    "foodCost": ["fish"],
+    "points": 5,
+    "eggCapacity": 2
+  },
+  {
+    "id": "bird-29",
+    "name": "Chipping Sparrow",
+    "habitats": ["grassland"],
+    "foodCost": ["seed"],
+    "points": 1,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-30",
+    "name": "Black-capped Chickadee",
+    "habitats": ["forest"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 1,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-31",
+    "name": "Killdeer",
+    "habitats": ["grassland", "wetlands"],
+    "foodCost": ["invertebrate"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-32",
+    "name": "Mourning Dove",
+    "habitats": ["grassland"],
+    "foodCost": ["seed"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-33",
+    "name": "Red-bellied Woodpecker",
+    "habitats": ["forest"],
+    "foodCost": ["invertebrate", "fruit"],
+    "points": 3,
+    "eggCapacity": 3
+  },
+  {
+    "id": "bird-34",
+    "name": "Tree Swallow",
+    "habitats": ["wetlands", "grassland"],
+    "foodCost": ["invertebrate"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-35",
+    "name": "Northern Flicker",
+    "habitats": ["forest", "grassland"],
+    "foodCost": ["invertebrate"],
+    "points": 3,
+    "eggCapacity": 3
+  },
+  {
+    "id": "bird-36",
+    "name": "Common Yellowthroat",
+    "habitats": ["wetlands"],
+    "foodCost": ["invertebrate"],
+    "points": 1,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-37",
+    "name": "Song Sparrow",
+    "habitats": ["wetlands", "grassland"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-38",
+    "name": "House Wren",
+    "habitats": ["forest", "grassland"],
+    "foodCost": ["invertebrate"],
+    "points": 1,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-39",
+    "name": "Carolina Wren",
+    "habitats": ["forest"],
+    "foodCost": ["invertebrate"],
+    "points": 1,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-40",
+    "name": "Tufted Titmouse",
+    "habitats": ["forest"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-41",
+    "name": "White-throated Sparrow",
+    "habitats": ["forest", "grassland"],
+    "foodCost": ["seed"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-42",
+    "name": "Dark-eyed Junco",
+    "habitats": ["forest", "grassland"],
+    "foodCost": ["seed"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-43",
+    "name": "Purple Finch",
+    "habitats": ["forest"],
+    "foodCost": ["seed", "fruit"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-44",
+    "name": "House Finch",
+    "habitats": ["grassland"],
+    "foodCost": ["seed"],
+    "points": 1,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-45",
+    "name": "Pine Siskin",
+    "habitats": ["forest"],
+    "foodCost": ["seed"],
+    "points": 1,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-46",
+    "name": "Red-breasted Nuthatch",
+    "habitats": ["forest"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-47",
+    "name": "Brown Creeper",
+    "habitats": ["forest"],
+    "foodCost": ["invertebrate"],
+    "points": 1,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-48",
+    "name": "Golden-crowned Kinglet",
+    "habitats": ["forest"],
+    "foodCost": ["invertebrate"],
+    "points": 1,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-49",
+    "name": "Ruby-crowned Kinglet",
+    "habitats": ["forest"],
+    "foodCost": ["invertebrate"],
+    "points": 1,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-50",
+    "name": "Cedar Waxwing",
+    "habitats": ["forest"],
+    "foodCost": ["fruit"],
+    "points": 3,
+    "eggCapacity": 3
+  },
+  {
+    "id": "bird-51",
+    "name": "Yellow Warbler",
+    "habitats": ["wetlands", "forest"],
+    "foodCost": ["invertebrate"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-52",
+    "name": "Common Redpoll",
+    "habitats": ["grassland"],
+    "foodCost": ["seed"],
+    "points": 1,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-53",
+    "name": "Pine Grosbeak",
+    "habitats": ["forest"],
+    "foodCost": ["seed", "fruit"],
+    "points": 3,
+    "eggCapacity": 3
+  },
+  {
+    "id": "bird-54",
+    "name": "Evening Grosbeak",
+    "habitats": ["forest"],
+    "foodCost": ["seed", "fruit"],
+    "points": 3,
+    "eggCapacity": 3
+  },
+  {
+    "id": "bird-55",
+    "name": "Rose-breasted Grosbeak",
+    "habitats": ["forest"],
+    "foodCost": ["seed", "fruit", "invertebrate"],
+    "points": 4,
+    "eggCapacity": 3
+  },
+  {
+    "id": "bird-56",
+    "name": "Indigo Bunting",
+    "habitats": ["grassland"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-57",
+    "name": "Lazuli Bunting",
+    "habitats": ["grassland"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-58",
+    "name": "Painted Bunting",
+    "habitats": ["grassland"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 3,
+    "eggCapacity": 3
+  },
+  {
+    "id": "bird-59",
+    "name": "Dickcissel",
+    "habitats": ["grassland"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 2,
+    "eggCapacity": 4
+  },
+  {
+    "id": "bird-60",
+    "name": "Bobolink",
+    "habitats": ["grassland"],
+    "foodCost": ["seed", "invertebrate"],
+    "points": 2,
+    "eggCapacity": 4
+  }
+]

@@ -1,0 +1,325 @@
+import { Server } from "socket.io";
+import { Game } from "./engine/Game.js";
+import { GainFood } from "./engine/Actions/GainFood.js";
+import { LayEggs } from "./engine/Actions/LayEggs.js";
+import { DrawCards } from "./engine/Actions/DrawCards.js";
+import { PlayBird } from "./engine/Actions/PlayBird.js";
+import { ExchangeResource } from "./engine/Actions/ExchangeResource.js";
+import { ConvertFood } from "./engine/Actions/ConvertFood.js";
+import { ScoringEngine } from "./engine/ScoringEngine.js";
+
+const io = new Server(3000, {
+  cors: { origin: "*" }
+});
+
+const lobbies = new Map();
+const games = new Map();
+
+io.on("connection", socket => {
+  socket.on("createLobby", ({ playerName }) => {
+    const lobbyId = Math.random().toString(36).slice(2, 8);
+    lobbies.set(lobbyId, {
+      id: lobbyId,
+      players: [{ id: socket.id, name: playerName }]
+    });
+    socket.join(lobbyId);
+    io.to(lobbyId).emit("lobbyUpdate", lobbies.get(lobbyId));
+  });
+
+  socket.on("joinLobby", ({ lobbyId, playerName }) => {
+    const lobby = lobbies.get(lobbyId);
+    if (!lobby) return;
+
+    lobby.players.push({ id: socket.id, name: playerName });
+    socket.join(lobbyId);
+    io.to(lobbyId).emit("lobbyUpdate", lobby);
+  });
+
+  socket.on("startGame", ({ lobbyId }) => {
+    const lobby = lobbies.get(lobbyId);
+    if (!lobby) return;
+
+    const game = new Game();
+    lobby.players.forEach(p => game.addPlayer(p.name, p.id));
+
+    game.dealSetup();
+    games.set(game.id, game);
+
+    // Move all lobby players into the game room BEFORE emitting
+    lobby.players.forEach(p => {
+      const s = io.sockets.sockets.get(p.id);
+      if (s) s.join(game.id);
+    });
+
+    // Emit to both lobbyId (for players still listening) and game.id (for safety)
+    const gameState = game.serialize();
+    io.to(lobbyId).emit("gameStarted", { state: gameState });
+    io.to(game.id).emit("gameStarted", { state: gameState });
+    
+    lobbies.delete(lobbyId);
+  });
+
+  socket.on("confirmSetup", ({ gameId, keptBirdIds, bonusCardId }) => {
+    const game = games.get(gameId);
+    if (!game) return;
+    
+    const player = game.getPlayer(socket.id);
+    if (!player) return;
+
+    if (game.phase !== "SETUP") return;
+
+    const availableBirds =
+      (player.setup?.birds || []).filter(b => b && b.id) || [];
+    const kept = availableBirds.filter(b =>
+      (keptBirdIds || []).includes(b.id)
+    );
+
+    // Validate selection and food cost
+    const foodCount = Object.values(player.food || {}).reduce(
+      (a, b) => a + b,
+      0
+    );
+    if (kept.length > foodCount) return;
+
+    // Discard food: 1 food per bird kept
+    let toDiscard = kept.length;
+    for (const k of Object.keys(player.food)) {
+      while (player.food[k] > 0 && toDiscard > 0) {
+        player.food[k]--;
+        toDiscard--;
+      }
+    }
+
+    player.hand = kept;
+    
+    // Handle bonus card selection
+    if (bonusCardId && player.setup.bonusCards) {
+      const selectedBonus = player.setup.bonusCards.find(b => b.id === bonusCardId);
+      if (selectedBonus) {
+        player.bonusCard = selectedBonus;
+      }
+    }
+    
+    player.setup.confirmed = true;
+    game.logs.push(`${player.name} confirmed setup (kept ${kept.length} birds)`);
+
+    const allConfirmed = game.players.every(p => p.setup.confirmed);
+    
+    if (allConfirmed) {
+      game.phase = "PLAY";
+      game.startRound();
+      game.logs.push("All players confirmed setup. Game starting!");
+
+      // Ensure all players are in the game room for updates
+      game.players.forEach(p => {
+        const s = io.sockets.sockets.get(p.id);
+        if (s) s.join(game.id);
+      });
+    } else {
+      const remaining = game.players.filter(p => !p.setup.confirmed).length;
+      game.logs.push(`Waiting for ${remaining} more player(s) to confirm setup`);
+    }
+
+    // Always emit state update so all players see the progress
+    io.to(game.id).emit("stateUpdate", game.serialize());
+  });
+
+  const ensurePlayable = game =>
+    game && game.phase === "PLAY" && game.turnManager.activePlayer;
+
+  function postActionAdvance(game) {
+    // If everyone is out of cubes, advance round or end game
+    const allOut = game.players.every(p => p.actionCubes === 0);
+    if (allOut) {
+      // Score the round goal
+      game.endRound();
+      
+      if (game.round.round >= game.round.maxRounds) {
+        game.phase = "END";
+        game.finalScores = ScoringEngine.scoreGame(game.players);
+        game.logs.push("Game Over! Final scores calculated.");
+        return;
+      }
+      game.round.round += 1;
+      game.startRound();
+      return;
+    }
+
+    game.turnManager.advance();
+  }
+
+  socket.on("gainFood", ({ gameId, habitat, foodTypes }) => {
+    const game = games.get(gameId);
+    if (!ensurePlayable(game)) {
+      socket.emit("actionError", { error: "Game is not in playable state" });
+      return;
+    }
+    const player = game.getPlayer(socket.id);
+    if (!player) {
+      socket.emit("actionError", { error: "Player not found" });
+      return;
+    }
+
+    if (player.actionCubes <= 0) {
+      socket.emit("actionError", { error: "No action cubes remaining" });
+      return;
+    }
+    player.actionCubes -= 1;
+
+    try {
+      GainFood(game, player, habitat, foodTypes);
+    } catch (e) {
+      player.actionCubes += 1;
+      socket.emit("actionError", { error: e.message });
+      return;
+    }
+
+    postActionAdvance(game);
+    io.to(game.id).emit("stateUpdate", game.serialize());
+    socket.emit("actionSuccess", { message: "Gained food successfully!" });
+  });
+
+  socket.on("layEggs", ({ gameId, habitat, birdIds }) => {
+    const game = games.get(gameId);
+    if (!ensurePlayable(game)) {
+      socket.emit("actionError", { error: "Game is not in playable state" });
+      return;
+    }
+    const player = game.getPlayer(socket.id);
+    if (!player) {
+      socket.emit("actionError", { error: "Player not found" });
+      return;
+    }
+
+    if (player.actionCubes <= 0) {
+      socket.emit("actionError", { error: "No action cubes remaining" });
+      return;
+    }
+    player.actionCubes -= 1;
+
+    try {
+      LayEggs(game, player, habitat, birdIds);
+    } catch (e) {
+      player.actionCubes += 1;
+      socket.emit("actionError", { error: e.message });
+      return;
+    }
+
+    postActionAdvance(game);
+    io.to(game.id).emit("stateUpdate", game.serialize());
+    socket.emit("actionSuccess", { message: `Laid ${birdIds.length} eggs successfully!` });
+  });
+
+  socket.on("drawCards", ({ gameId, habitat, count, fromTray }) => {
+    const game = games.get(gameId);
+    if (!ensurePlayable(game)) {
+      socket.emit("actionError", { error: "Game is not in playable state" });
+      return;
+    }
+    const player = game.getPlayer(socket.id);
+    if (!player) {
+      socket.emit("actionError", { error: "Player not found" });
+      return;
+    }
+
+    if (player.actionCubes <= 0) {
+      socket.emit("actionError", { error: "No action cubes remaining" });
+      return;
+    }
+    player.actionCubes -= 1;
+
+    try {
+      DrawCards(game, player, habitat, count, fromTray || []);
+    } catch (e) {
+      player.actionCubes += 1;
+      socket.emit("actionError", { error: e.message });
+      return;
+    }
+
+    postActionAdvance(game);
+    io.to(game.id).emit("stateUpdate", game.serialize());
+    socket.emit("actionSuccess", { message: `Drew ${count} cards successfully!` });
+  });
+
+  socket.on("playBird", ({ gameId, birdId, habitat }) => {
+    const game = games.get(gameId);
+    if (!ensurePlayable(game)) {
+      socket.emit("actionError", { error: "Game is not in playable state" });
+      return;
+    }
+    const player = game.getPlayer(socket.id);
+    if (!player) {
+      socket.emit("actionError", { error: "Player not found" });
+      return;
+    }
+
+    if (player.actionCubes <= 0) {
+      socket.emit("actionError", { error: "No action cubes remaining" });
+      return;
+    }
+    player.actionCubes -= 1;
+
+    try {
+      PlayBird(game, player, birdId, habitat);
+    } catch (e) {
+      player.actionCubes += 1;
+      socket.emit("actionError", { error: e.message });
+      return;
+    }
+
+    postActionAdvance(game);
+    io.to(game.id).emit("stateUpdate", game.serialize());
+    const bird = player.habitats[habitat][player.habitats[habitat].length - 1];
+    socket.emit("actionSuccess", { message: `Played ${bird?.name || "bird"} successfully!` });
+  });
+
+  // Resource exchange handler
+  socket.on("exchangeResource", ({ gameId, exchangeType, params }) => {
+    const game = games.get(gameId);
+    if (!ensurePlayable(game)) {
+      socket.emit("actionError", { error: "Game is not in playable state" });
+      return;
+    }
+    const player = game.getPlayer(socket.id);
+    if (!player) {
+      socket.emit("actionError", { error: "Player not found" });
+      return;
+    }
+
+    try {
+      ExchangeResource(game, player, exchangeType, params);
+    } catch (e) {
+      socket.emit("actionError", { error: e.message });
+      return;
+    }
+
+    io.to(game.id).emit("stateUpdate", game.serialize());
+    socket.emit("actionSuccess", { message: "Exchange completed successfully!" });
+  });
+
+  // Food conversion (2:1 ratio)
+  socket.on("convertFood", ({ gameId, giveFoods, getFood }) => {
+    const game = games.get(gameId);
+    if (!ensurePlayable(game)) {
+      socket.emit("actionError", { error: "Game is not in playable state" });
+      return;
+    }
+    const player = game.getPlayer(socket.id);
+    if (!player) {
+      socket.emit("actionError", { error: "Player not found" });
+      return;
+    }
+
+    try {
+      ConvertFood(game, player, giveFoods, getFood);
+    } catch (e) {
+      socket.emit("actionError", { error: e.message });
+      return;
+    }
+
+    io.to(game.id).emit("stateUpdate", game.serialize());
+    socket.emit("actionSuccess", { message: "Food conversion successful!" });
+  });
+});
+
+console.log("Wingspan server running on http://localhost:3000");

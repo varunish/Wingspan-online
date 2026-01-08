@@ -1,0 +1,38 @@
+[
+  {
+    "id": "goal-1",
+    "name": "Birds in Forest",
+    "description": "Most birds in the forest habitat",
+    "scoring": "4/3/2/1 points for 1st/2nd/3rd/4th place"
+  },
+  {
+    "id": "goal-2",
+    "name": "Eggs on Birds",
+    "description": "Most total eggs on your birds",
+    "scoring": "4/3/2/1 points for 1st/2nd/3rd/4th place"
+  },
+  {
+    "id": "goal-3",
+    "name": "Total Birds",
+    "description": "Most birds played in all habitats",
+    "scoring": "4/3/2/1 points for 1st/2nd/3rd/4th place"
+  },
+  {
+    "id": "goal-4",
+    "name": "Birds in Grassland",
+    "description": "Most birds in the grassland habitat",
+    "scoring": "4/3/2/1 points for 1st/2nd/3rd/4th place"
+  },
+  {
+    "id": "goal-5",
+    "name": "Birds in Wetlands",
+    "description": "Most birds in the wetlands habitat",
+    "scoring": "4/3/2/1 points for 1st/2nd/3rd/4th place"
+  },
+  {
+    "id": "goal-6",
+    "name": "Bird Cards in Hand",
+    "description": "Most bird cards in hand at end of round",
+    "scoring": "4/3/2/1 points for 1st/2nd/3rd/4th place"
+  }
+]

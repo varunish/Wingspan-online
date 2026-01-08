@@ -1,0 +1,72 @@
+body {
+  font-family: sans-serif;
+}
+
+.game {
+  padding: 16px;
+}
+
+.board {
+  border: 2px solid #444;
+  margin-bottom: 16px;
+}
+
+.habitat {
+  padding: 8px;
+  border-top: 1px solid #aaa;
+}
+
+.players {
+  display: flex;
+  gap: 12px;
+}
+
+.player {
+  border: 1px solid #aaa;
+  padding: 8px;
+}
+
+.player.active {
+  border-color: green;
+}
+
+.actions {
+  margin-top: 16px;
+}
+
+.hint {
+  position: fixed;
+  right: 16px;
+  top: 16px;
+  background: #ffe;
+  border: 1px solid #cc0;
+  padding: 8px;
+}
+
+.turn-banner {
+  background: #222;
+  color: #fff;
+  padding: 8px 12px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.hand {
+  margin-top: 8px;
+}
+
+.card {
+  border: 1px solid #999;
+  padding: 6px;
+  margin-top: 4px;
+  background: #f9f9f9;
+}
+
+.board-section {
+  margin-bottom: 16px;
+}
+
+.players-section {
+  display: flex;
+  gap: 16px;
+}
