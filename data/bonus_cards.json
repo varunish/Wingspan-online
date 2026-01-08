@@ -1,42 +1,27 @@
 [
   {
     "id": "bonus-1",
-    "name": "Cartographer",
-    "description": "Score 1 point for each bird in the forest habitat"
+    "name": "Oologist",
+    "description": "7 to 8 birds: 3 9+ birds: 6 Birds that have at least 1 egg laid on them Wingspan_BonusCards_r5.indd   13 1/15/19   9:30 PM"
   },
   {
     "id": "bonus-2",
-    "name": "Egg Collector",
-    "description": "Score 1 point for every 2 eggs you have"
+    "name": "Anatomist",
+    "description": "Body parts include beak, belly, bill, breast, cap, chin, collar, crest, crown, eye, face, head, neck, rump, shoulder, tail, throat, wing (22% of cards) 2 to 3 birds: 3 4+ birds: 7 Birds with body parts in their names Wingspan_BonusCards_r5.indd   21 1/15/19   9:30 PM"
   },
   {
     "id": "bonus-3",
-    "name": "Wetland Specialist",
-    "description": "Score 1 point for each bird in the wetlands habitat"
+    "name": "Photographer",
+    "description": "Colors include ash, black, blue, bronze, brown, cerulean, chestnut, ferruginous, gold, gray, green, indigo, lazuli, purple, red, rose, roseate, ruby, ruddy, rufous, snowy, white, yellow (34% of cards) 4 to 5 birds: 3 6+ birds: 6 Birds with colors in their names Wingspan_BonusCards_r5.indd   22 1/15/19   9:30 PM"
   },
   {
     "id": "bonus-4",
-    "name": "Grassland Guardian",
-    "description": "Score 1 point for each bird in the grassland habitat"
+    "name": "Rodentologist",
+    "description": "2 per bird Birds that eat (15% of cards) Any bird with a symbol. The bird may also eat other kinds of food. Wingspan_BonusCards_r5.indd   4 1/15/19   9:30 PM"
   },
   {
     "id": "bonus-5",
-    "name": "Food Hoarder",
-    "description": "Score 1 point for every 3 food tokens cached on your birds"
-  },
-  {
-    "id": "bonus-6",
-    "name": "Platform Nester",
-    "description": "Score 3 points for each platform nest bird"
-  },
-  {
-    "id": "bonus-7",
-    "name": "Bowl Nester",
-    "description": "Score 3 points for each bowl nest bird"
-  },
-  {
-    "id": "bonus-8",
-    "name": "Ground Nester",
-    "description": "Score 3 points for each ground nest bird"
+    "name": "Ecologist",
+    "description": "2 per bird Birds in your habitat with the fewest birds Ties count: If you have 3 birds in each habitat, your habitat with the fewest birds has 3 birds. Wingspan_BonusCards_r5.indd   8 1/15/19   9:30 PM"
   }
 ]

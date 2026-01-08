@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+client/node_modules/
+
+# Build outputs
+client/dist/
+*.log
+
+# Environment files
+.env
+.env.local
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large asset sources (keep only processed assets in client/public/assets/)
+Wingspan Assets/
+temp_extracted/
+assets/
+
+# Large text files (extracted for reference, not needed in repo)
+wingspan_appendix_full_text.txt
+wingspan_appendix_sample.txt
+wingspan_bonus_cards_text.txt
+wingspan_csv_sample.json
+
+# Temporary/guide files (not needed in repo)
+ASSET_INTEGRATION_GUIDE.md
+ASSET_MAPPING_COMPLETE.md
+TTS_EXTRACTION_GUIDE.md
+FIND_WINGSPAN_MOD_GUIDE.md
+
+# Keep only the essential assets
+# client/public/assets/ IS INCLUDED (birds and bonus card images)

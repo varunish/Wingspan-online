@@ -46,6 +46,7 @@ export function ActionPanel({ state, myPlayerId }) {
     birdId: "",
     habitat: ""
   });
+  const [wildFoodChoices, setWildFoodChoices] = useState([]); // Food selections for wild costs
   const [eggTargets, setEggTargets] = useState([]);
   const [drawCount, setDrawCount] = useState(wetlandStrength);
   const [drawMode, setDrawMode] = useState("deck"); // "deck" or "tray"
@@ -337,21 +338,20 @@ export function ActionPanel({ state, myPlayerId }) {
             <div>
               <select
                 value={playBirdSelection.birdId}
-                onChange={e =>
-                  setPlayBirdSelection(sel => ({
-                    ...sel,
+                onChange={e => {
+                  const bird = availableBirds.find(b => b.id === e.target.value);
+                  setPlayBirdSelection({
                     birdId: e.target.value,
-                    habitat:
-                      availableBirds.find(b => b.id === e.target.value)
-                        ?.habitats?.[0] || ""
-                  }))
-                }
+                    habitat: bird?.habitats?.[0] || ""
+                  });
+                  setWildFoodChoices([]); // Reset wild food choices when bird changes
+                }}
                 disabled={!canAct}
               >
                 <option value="">Select bird</option>
                 {availableBirds.map((b, idx) => (
                   <option key={b.instanceId || `${b.id}-${idx}`} value={b.id}>
-                    {b.name} ({b.foodCost.join(",")})
+                    {b.name} ({b.foodCost.map(f => f === 'wild' ? '⭐' : f).join(",")})
                   </option>
                 ))}
               </select>
@@ -377,12 +377,65 @@ export function ActionPanel({ state, myPlayerId }) {
                 ))}
               </select>
             </div>
+
+            {/* Wild Food Selection UI */}
+            {(() => {
+              const selectedBird = availableBirds.find(b => b.id === playBirdSelection.birdId);
+              const wildCount = (selectedBird?.foodCost || []).filter(f => f === 'wild').length;
+              
+              if (wildCount > 0 && me) {
+                const availableFoodTypes = ['invertebrate', 'seed', 'fish', 'fruit', 'rodent']
+                  .filter(f => (me.food[f] || 0) > 0);
+                
+                return (
+                  <div style={{ marginTop: 8, padding: 8, backgroundColor: '#fffbea', borderRadius: 4, border: '2px solid #FFD700' }}>
+                    <div style={{ fontSize: '0.9em', fontWeight: 'bold', marginBottom: 4 }}>
+                      Choose {wildCount} food for ⭐ wild cost ({wildFoodChoices.length}/{wildCount} selected):
+                    </div>
+                    <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                      {availableFoodTypes.map(foodType => (
+                        <button
+                          key={foodType}
+                          style={{
+                            padding: '4px 8px',
+                            backgroundColor: wildFoodChoices.includes(foodType) ? '#4CAF50' : '#fff',
+                            color: wildFoodChoices.includes(foodType) ? '#fff' : '#333',
+                            border: '2px solid #ccc',
+                            borderRadius: 4,
+                            cursor: 'pointer'
+                          }}
+                          onClick={() => {
+                            setWildFoodChoices(choices => {
+                              if (choices.includes(foodType)) {
+                                return choices.filter(f => f !== foodType);
+                              } else if (choices.length < wildCount) {
+                                return [...choices, foodType];
+                              }
+                              return choices;
+                            });
+                          }}
+                        >
+                          {foodType} ({me.food[foodType]})
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })()}
+
             <button
               style={{ marginTop: 4 }}
               disabled={
                 !canAct ||
                 !playBirdSelection.birdId ||
-                !playBirdSelection.habitat
+                !playBirdSelection.habitat ||
+                (() => {
+                  const selectedBird = availableBirds.find(b => b.id === playBirdSelection.birdId);
+                  const wildCount = (selectedBird?.foodCost || []).filter(f => f === 'wild').length;
+                  return wildCount > 0 && wildFoodChoices.length !== wildCount;
+                })()
               }
               onClick={() => {
                 const validation = validatePlayBird(
@@ -402,9 +455,11 @@ export function ActionPanel({ state, myPlayerId }) {
                 socket.emit("playBird", {
                   gameId: state.id,
                   birdId: playBirdSelection.birdId,
-                  habitat: playBirdSelection.habitat
+                  habitat: playBirdSelection.habitat,
+                  wildFoodChoices: wildFoodChoices // Send the player's choices
                 });
                 setPlayBirdSelection({ birdId: "", habitat: "" });
+                setWildFoodChoices([]);
               }}
             >
               Play Bird

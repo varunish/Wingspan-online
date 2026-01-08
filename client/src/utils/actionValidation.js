@@ -66,18 +66,40 @@ export function validatePlayBird(player, state, birdId, habitat) {
   // Check food cost
   const foodCost = bird.foodCost || [];
   const playerFood = player.food || {};
+  
+  // Create a copy to track available food as we validate
+  const availableFood = { ...playerFood };
   const missingFood = [];
   
-  foodCost.forEach(foodType => {
-    if (!playerFood[foodType] || playerFood[foodType] <= 0) {
-      missingFood.push(foodType);
+  for (const requiredFood of foodCost) {
+    if (requiredFood === 'wild') {
+      // Wild means ANY food type - check if player has at least 1 of any food
+      const totalFood = Object.values(availableFood).reduce((sum, count) => sum + count, 0);
+      if (totalFood <= 0) {
+        missingFood.push('any food (wild)');
+      } else {
+        // Deduct one food from available pool
+        for (const foodType in availableFood) {
+          if (availableFood[foodType] > 0) {
+            availableFood[foodType]--;
+            break;
+          }
+        }
+      }
+    } else {
+      // Specific food type required
+      if (!availableFood[requiredFood] || availableFood[requiredFood] <= 0) {
+        missingFood.push(requiredFood);
+      } else {
+        availableFood[requiredFood]--;
+      }
     }
-  });
+  }
 
   if (missingFood.length > 0) {
     return { 
       valid: false, 
-      error: `Insufficient food to play ${bird.name}. Missing: ${missingFood.join(", ")}. Required: ${foodCost.join(", ")}` 
+      error: `Insufficient food to play ${bird.name}. Missing: ${missingFood.join(", ")}. Required: ${foodCost.map(f => f === 'wild' ? 'any food' : f).join(", ")}` 
     };
   }
 

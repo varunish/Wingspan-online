@@ -1,14 +1,27 @@
 import { canPlayBird } from "../validators/canPlayBird.js";
 import { PowerEngine } from "../Powers/PowerEngine.js";
 
-export function PlayBird(game, player, birdId, habitat) {
+export function PlayBird(game, player, birdId, habitat, wildFoodChoices = []) {
   const bird = player.hand.find(b => b.id === birdId);
   if (!bird) throw new Error("Bird not in hand");
 
-  canPlayBird(game, player, bird, habitat);
+  canPlayBird(game, player, bird, habitat, wildFoodChoices);
 
   // Pay food cost
-  bird.foodCost.forEach(f => player.food[f]--);
+  let wildChoiceIndex = 0;
+  bird.foodCost.forEach(f => {
+    if (f === 'wild') {
+      // Wild means ANY food type - use player's choice
+      const chosenFood = wildFoodChoices[wildChoiceIndex++];
+      if (!chosenFood || !player.food[chosenFood] || player.food[chosenFood] <= 0) {
+        throw new Error(`Invalid wild food choice: ${chosenFood}`);
+      }
+      player.food[chosenFood]--;
+    } else {
+      // Specific food type
+      player.food[f]--;
+    }
+  });
 
   // Pay egg cost
   const habitatBirds = player.habitats[habitat];

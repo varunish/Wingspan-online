@@ -13,6 +13,11 @@ export function BirdCard({ bird, onClick, selected, compact = false, showEggs = 
   if (!bird) return null;
 
   const habitatColor = HABITAT_COLORS[bird.habitats?.[0]] || "#666";
+  
+  // Try to load actual card image
+  const cardImagePath = `/assets/birds/fronts/${bird.id}.jpg`;
+  const [imageExists, setImageExists] = React.useState(true);
+  const [imageLoaded, setImageLoaded] = React.useState(false);
 
   if (compact) {
     return (
@@ -51,6 +56,70 @@ export function BirdCard({ bird, onClick, selected, compact = false, showEggs = 
     );
   }
 
+  // Try to show image version first
+  if (imageExists) {
+    return (
+      <div
+        onClick={onClick}
+        style={{
+          width: 180,
+          height: 250,
+          borderRadius: 12,
+          border: selected ? "4px solid #FFD700" : "3px solid #333",
+          boxShadow: selected
+            ? "0 6px 12px rgba(255,215,0,0.6)"
+            : "0 4px 8px rgba(0,0,0,0.3)",
+          cursor: onClick ? "pointer" : "default",
+          overflow: "hidden",
+          transition: "all 0.2s ease",
+          transform: selected ? "scale(1.05)" : "scale(1)",
+          position: "relative"
+        }}
+      >
+        <img
+          src={cardImagePath}
+          alt={bird.name}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            display: imageLoaded ? 'block' : 'none'
+          }}
+          onError={() => setImageExists(false)}
+          onLoad={() => setImageLoaded(true)}
+        />
+        {!imageLoaded && (
+          <div style={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: habitatColor,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#fff',
+            fontSize: '0.9em'
+          }}>Loading...</div>
+        )}
+        {showEggs && bird.eggs > 0 && imageLoaded && (
+          <div style={{
+            position: 'absolute',
+            bottom: 8,
+            right: 8,
+            backgroundColor: 'rgba(255,255,255,0.95)',
+            padding: '4px 8px',
+            borderRadius: 12,
+            fontSize: '0.85em',
+            fontWeight: 'bold',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
+          }}>
+            <EggCounter current={bird.eggs || 0} max={bird.eggCapacity || 6} size={16} />
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Fallback to styled version if image fails to load
   return (
     <div
       onClick={onClick}

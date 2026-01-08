@@ -1,526 +1,399 @@
 [
   {
     "id": "bird-1",
-    "name": "Mallard",
-    "habitats": ["wetlands"],
-    "foodCost": ["seed"],
-    "points": 3,
+    "name": "Spotted Sandpiper",
+    "habitats": [
+      "wetland"
+    ],
+    "foodCost": [
+      "invertebrate"
+    ],
+    "points": 5,
     "nestType": "ground",
-    "eggCapacity": 5,
-    "wingspan": 95,
+    "eggCapacity": 2,
+    "wingspan": 38,
     "power": {
-      "type": "WHEN_PLAYED",
-      "effect": "GAIN_FOOD",
-      "food": "fish"
+      "type": "WHEN_ACTIVATED",
+      "effect": "All players draw 1 [card] from the deck."
     }
   },
   {
     "id": "bird-2",
-    "name": "Red-tailed Hawk",
-    "habitats": ["forest"],
-    "foodCost": ["rodent"],
-    "points": 5,
-    "eggCapacity": 2,
+    "name": "Cassin’s Finch",
+    "habitats": [
+      "forest"
+    ],
+    "foodCost": [
+      "seed",
+      "fruit"
+    ],
+    "points": 4,
+    "nestType": "bowl",
+    "eggCapacity": 3,
+    "wingspan": 30,
     "power": {
       "type": "WHEN_ACTIVATED",
-      "effect": "GAIN_FOOD",
-      "food": "rodent",
-      "value": 1
+      "effect": "Draw 2 new bonus cards and keep 1."
     }
   },
   {
     "id": "bird-3",
-    "name": "American Robin",
-    "habitats": ["forest", "grassland"],
-    "foodCost": ["invertebrate"],
-    "points": 4,
-    "eggCapacity": 3,
+    "name": "Northern Harrier",
+    "habitats": [
+      "grassland",
+      "wetland"
+    ],
+    "foodCost": [
+      "rodent"
+    ],
+    "points": 3,
+    "nestType": "platform",
+    "eggCapacity": 2,
+    "wingspan": 109,
     "power": {
       "type": "WHEN_ACTIVATED",
-      "effect": "LAY_EGG"
+      "effect": "Look at a [card] from the deck. If <75cm, tuck it behind this bird. If not, discard it."
     }
   },
   {
     "id": "bird-4",
-    "name": "Blue Jay",
-    "habitats": ["forest"],
-    "foodCost": ["seed", "fruit"],
+    "name": "Cooper’s Hawk",
+    "habitats": [
+      "forest"
+    ],
+    "foodCost": [
+      "rodent"
+    ],
     "points": 3,
-    "eggCapacity": 3,
+    "nestType": "platform",
+    "eggCapacity": 2,
+    "wingspan": 79,
     "power": {
       "type": "WHEN_ACTIVATED",
-      "effect": "CACHE_FOOD",
-      "food": "wild",
-      "value": 1
+      "effect": "Look at a [card] from the deck. If <75cm, tuck it behind this bird. If not, discard it."
     }
   },
   {
     "id": "bird-5",
-    "name": "Northern Cardinal",
-    "habitats": ["forest"],
-    "foodCost": ["seed", "fruit"],
+    "name": "Red-Shouldered Hawk",
+    "habitats": [
+      "forest"
+    ],
+    "foodCost": [
+      "rodent"
+    ],
     "points": 3,
-    "eggCapacity": 3,
+    "nestType": "platform",
+    "eggCapacity": 2,
+    "wingspan": 102,
     "power": {
       "type": "WHEN_ACTIVATED",
-      "effect": "GAIN_FOOD",
-      "food": "seed",
-      "value": 1
+      "effect": "Look at a [card] from the deck. If <75cm, tuck it under this bird. If not, discard it."
     }
   },
   {
     "id": "bird-6",
-    "name": "Bald Eagle",
-    "habitats": ["wetlands"],
-    "foodCost": ["fish", "rodent"],
-    "points": 9,
-    "eggCapacity": 1
+    "name": "Barred Owl",
+    "habitats": [
+      "forest"
+    ],
+    "foodCost": [
+      "rodent"
+    ],
+    "points": 3,
+    "nestType": "cavity",
+    "eggCapacity": 2,
+    "wingspan": 107,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "Look at a [card] from the deck. If <75cm, tuck it behind this bird. If not, discard it."
+    }
   },
   {
     "id": "bird-7",
-    "name": "Great Blue Heron",
-    "habitats": ["wetlands"],
-    "foodCost": ["fish"],
+    "name": "Swainson’s Hawk",
+    "habitats": [
+      "grassland"
+    ],
+    "foodCost": [
+      "invertebrate",
+      "rodent"
+    ],
     "points": 5,
+    "nestType": "platform",
     "eggCapacity": 2,
+    "wingspan": 130,
     "power": {
       "type": "WHEN_ACTIVATED",
-      "effect": "DRAW_CARD",
-      "value": 1
+      "effect": "Look at a [card] from the deck. If <75cm, tuck it behind this bird. If not, discard it."
     }
   },
   {
     "id": "bird-8",
-    "name": "Canada Goose",
-    "habitats": ["wetlands", "grassland"],
-    "foodCost": ["seed"],
-    "points": 4,
+    "name": "Brewer’s Blackbird",
+    "habitats": [
+      "grassland"
+    ],
+    "foodCost": [
+      "seed",
+      "wild"
+    ],
+    "points": 3,
+    "nestType": "bowl",
     "eggCapacity": 3,
+    "wingspan": 41,
     "power": {
       "type": "WHEN_ACTIVATED",
-      "effect": "DRAW_CARD",
-      "value": 1
+      "effect": "Tuck a [card] from your hand behind this bird. If you do, also lay 1 [egg] on this bird."
     }
   },
   {
     "id": "bird-9",
-    "name": "Peregrine Falcon",
-    "habitats": ["grassland"],
-    "foodCost": ["rodent"],
-    "points": 8,
-    "eggCapacity": 1
+    "name": "Trumpeter Swan",
+    "habitats": [
+      "wetland"
+    ],
+    "foodCost": [
+      "seed",
+      "seed",
+      "wild"
+    ],
+    "points": 9,
+    "nestType": "ground",
+    "eggCapacity": 2,
+    "wingspan": 203
   },
   {
     "id": "bird-10",
-    "name": "Barn Owl",
-    "habitats": ["grassland"],
-    "foodCost": ["rodent"],
-    "points": 5,
-    "eggCapacity": 2
+    "name": "Loggerhead Shrike",
+    "habitats": [
+      "grassland",
+      "wetland"
+    ],
+    "foodCost": [
+      "invertebrate",
+      "rodent"
+    ],
+    "points": 3,
+    "nestType": "bowl",
+    "eggCapacity": 4,
+    "wingspan": 30,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "When another player takes the \"gain food\" action, if they gain any number of [rodent], also gain 1 [rodent] from the supply and cache it on this card."
+    }
   },
   {
     "id": "bird-11",
-    "name": "House Sparrow",
-    "habitats": ["grassland"],
-    "foodCost": ["seed"],
-    "points": 1,
-    "eggCapacity": 4,
+    "name": "American Avocet",
+    "habitats": [
+      "wetland"
+    ],
+    "foodCost": [
+      "invertebrate",
+      "invertebrate",
+      "seed"
+    ],
+    "points": 6,
+    "nestType": "ground",
+    "eggCapacity": 2,
+    "wingspan": 79,
     "power": {
       "type": "WHEN_ACTIVATED",
-      "effect": "LAY_EGG",
-      "value": 1
+      "effect": "When another player takes the \"lay eggs\" action, this bird lays 1 [egg] on another bird with a [ground] nest."
     }
   },
   {
     "id": "bird-12",
-    "name": "American Crow",
-    "habitats": ["forest", "grassland"],
-    "foodCost": ["seed", "fruit"],
+    "name": "Brown-Headed Cowbird",
+    "habitats": [
+      "grassland"
+    ],
+    "foodCost": [
+      "seed"
+    ],
     "points": 3,
-    "eggCapacity": 3
+    "nestType": "platform",
+    "eggCapacity": 0,
+    "wingspan": 30,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "When another player takes the \"lay eggs\" action, this bird lays 1 [egg] on another bird with a [bowl] nest."
+    }
   },
   {
     "id": "bird-13",
-    "name": "Wood Duck",
-    "habitats": ["wetlands", "forest"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 4,
-    "eggCapacity": 4
+    "name": "Yellow-Billed Cuckoo",
+    "habitats": [
+      "forest"
+    ],
+    "foodCost": [
+      "invertebrate",
+      "invertebrate",
+      "wild"
+    ],
+    "points": 5,
+    "nestType": "platform",
+    "eggCapacity": 2,
+    "wingspan": 46,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "When another player takes the \"lay eggs\" action, this bird lays 1 [egg] on another bird with a [bowl] nest."
+    }
   },
   {
     "id": "bird-14",
-    "name": "Red-winged Blackbird",
-    "habitats": ["wetlands", "grassland"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 2,
-    "eggCapacity": 4
+    "name": "Bronzed Cowbird",
+    "habitats": [
+      "grassland"
+    ],
+    "foodCost": [
+      "invertebrate",
+      "seed"
+    ],
+    "points": 5,
+    "nestType": "platform",
+    "eggCapacity": 0,
+    "wingspan": 36,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "When another player takes the \"lay eggs\" action, this bird lays 1 [egg] on another bird with a [bowl] nest."
+    }
   },
   {
     "id": "bird-15",
-    "name": "Common Loon",
-    "habitats": ["wetlands"],
-    "foodCost": ["fish"],
-    "points": 6,
-    "eggCapacity": 2
+    "name": "Barrow’s Goldeneye",
+    "habitats": [
+      "wetland"
+    ],
+    "foodCost": [
+      "invertebrate",
+      "seed",
+      "fish"
+    ],
+    "points": 5,
+    "nestType": "cavity",
+    "eggCapacity": 4,
+    "wingspan": 71,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "When another player takes the \"lay eggs\" action, this bird lays 1 [egg] on another bird with a [cavity] nest."
+    }
   },
   {
     "id": "bird-16",
-    "name": "Snowy Owl",
-    "habitats": ["grassland"],
-    "foodCost": ["rodent"],
-    "points": 7,
-    "eggCapacity": 2
+    "name": "Eastern Kingbird",
+    "habitats": [
+      "forest",
+      "grassland",
+      "wetland"
+    ],
+    "foodCost": [
+      "invertebrate",
+      "fruit"
+    ],
+    "points": 2,
+    "nestType": "bowl",
+    "eggCapacity": 2,
+    "wingspan": 38,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "When another player plays a [forest] bird, gain 1 [invertebrate] from the supply."
+    }
   },
   {
     "id": "bird-17",
-    "name": "Ruby-throated Hummingbird",
-    "habitats": ["forest"],
-    "foodCost": ["fruit", "nectar"],
-    "points": 1,
-    "eggCapacity": 2
+    "name": "Belted Kingfisher",
+    "habitats": [
+      "wetland"
+    ],
+    "foodCost": [
+      "fish",
+      "wild"
+    ],
+    "points": 4,
+    "nestType": "wild",
+    "eggCapacity": 4,
+    "wingspan": 53,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "When another player plays a [wetland] bird, gain 1 [fish] from the supply."
+    }
   },
   {
     "id": "bird-18",
-    "name": "Eastern Bluebird",
-    "habitats": ["grassland"],
-    "foodCost": ["invertebrate", "fruit"],
-    "points": 3,
-    "eggCapacity": 4
+    "name": "Turkey Vulture",
+    "habitats": [
+      "forest",
+      "grassland",
+      "wetland"
+    ],
+    "foodCost": [
+      "invertebrate"
+    ],
+    "points": 1,
+    "nestType": "cavity",
+    "eggCapacity": 1,
+    "wingspan": 170,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "When another player's predator succeeds, gain 1 [die] from the birdfeeder."
+    }
   },
   {
     "id": "bird-19",
-    "name": "Wild Turkey",
-    "habitats": ["forest", "grassland"],
-    "foodCost": ["seed", "fruit"],
-    "points": 4,
-    "eggCapacity": 4
+    "name": "Black-Billed Magpie",
+    "habitats": [
+      "grassland"
+    ],
+    "foodCost": [
+      "wild",
+      "wild"
+    ],
+    "points": 3,
+    "nestType": "wild",
+    "eggCapacity": 3,
+    "wingspan": 64,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "When another player's predator succeeds, gain 1 [die] from the birdfeeder."
+    }
   },
   {
     "id": "bird-20",
-    "name": "Belted Kingfisher",
-    "habitats": ["wetlands"],
-    "foodCost": ["fish"],
-    "points": 4,
-    "eggCapacity": 3
+    "name": "Black Vulture",
+    "habitats": [
+      "forest"
+    ],
+    "foodCost": [
+      "invertebrate"
+    ],
+    "points": 2,
+    "nestType": "cavity",
+    "eggCapacity": 1,
+    "wingspan": 150,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "When another player's predator succeeds, gain 1 [die] from the birdfeeder."
+    }
   },
   {
     "id": "bird-21",
-    "name": "Pileated Woodpecker",
-    "habitats": ["forest"],
-    "foodCost": ["invertebrate", "fruit"],
+    "name": "Horned Lark",
+    "habitats": [
+      "grassland"
+    ],
+    "foodCost": [
+      "invertebrate",
+      "seed"
+    ],
     "points": 5,
-    "eggCapacity": 2
-  },
-  {
-    "id": "bird-22",
-    "name": "Common Grackle",
-    "habitats": ["grassland"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-23",
-    "name": "Sandhill Crane",
-    "habitats": ["wetlands", "grassland"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 5,
-    "eggCapacity": 2
-  },
-  {
-    "id": "bird-24",
-    "name": "Great Horned Owl",
-    "habitats": ["forest"],
-    "foodCost": ["rodent"],
-    "points": 6,
-    "eggCapacity": 2
-  },
-  {
-    "id": "bird-25",
-    "name": "American Goldfinch",
-    "habitats": ["grassland"],
-    "foodCost": ["seed"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-26",
-    "name": "White-breasted Nuthatch",
-    "habitats": ["forest"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-27",
-    "name": "Brown Thrasher",
-    "habitats": ["forest", "grassland"],
-    "foodCost": ["invertebrate", "fruit"],
-    "points": 3,
-    "eggCapacity": 3
-  },
-  {
-    "id": "bird-28",
-    "name": "Double-crested Cormorant",
-    "habitats": ["wetlands"],
-    "foodCost": ["fish"],
-    "points": 5,
-    "eggCapacity": 2
-  },
-  {
-    "id": "bird-29",
-    "name": "Chipping Sparrow",
-    "habitats": ["grassland"],
-    "foodCost": ["seed"],
-    "points": 1,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-30",
-    "name": "Black-capped Chickadee",
-    "habitats": ["forest"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 1,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-31",
-    "name": "Killdeer",
-    "habitats": ["grassland", "wetlands"],
-    "foodCost": ["invertebrate"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-32",
-    "name": "Mourning Dove",
-    "habitats": ["grassland"],
-    "foodCost": ["seed"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-33",
-    "name": "Red-bellied Woodpecker",
-    "habitats": ["forest"],
-    "foodCost": ["invertebrate", "fruit"],
-    "points": 3,
-    "eggCapacity": 3
-  },
-  {
-    "id": "bird-34",
-    "name": "Tree Swallow",
-    "habitats": ["wetlands", "grassland"],
-    "foodCost": ["invertebrate"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-35",
-    "name": "Northern Flicker",
-    "habitats": ["forest", "grassland"],
-    "foodCost": ["invertebrate"],
-    "points": 3,
-    "eggCapacity": 3
-  },
-  {
-    "id": "bird-36",
-    "name": "Common Yellowthroat",
-    "habitats": ["wetlands"],
-    "foodCost": ["invertebrate"],
-    "points": 1,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-37",
-    "name": "Song Sparrow",
-    "habitats": ["wetlands", "grassland"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-38",
-    "name": "House Wren",
-    "habitats": ["forest", "grassland"],
-    "foodCost": ["invertebrate"],
-    "points": 1,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-39",
-    "name": "Carolina Wren",
-    "habitats": ["forest"],
-    "foodCost": ["invertebrate"],
-    "points": 1,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-40",
-    "name": "Tufted Titmouse",
-    "habitats": ["forest"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-41",
-    "name": "White-throated Sparrow",
-    "habitats": ["forest", "grassland"],
-    "foodCost": ["seed"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-42",
-    "name": "Dark-eyed Junco",
-    "habitats": ["forest", "grassland"],
-    "foodCost": ["seed"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-43",
-    "name": "Purple Finch",
-    "habitats": ["forest"],
-    "foodCost": ["seed", "fruit"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-44",
-    "name": "House Finch",
-    "habitats": ["grassland"],
-    "foodCost": ["seed"],
-    "points": 1,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-45",
-    "name": "Pine Siskin",
-    "habitats": ["forest"],
-    "foodCost": ["seed"],
-    "points": 1,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-46",
-    "name": "Red-breasted Nuthatch",
-    "habitats": ["forest"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-47",
-    "name": "Brown Creeper",
-    "habitats": ["forest"],
-    "foodCost": ["invertebrate"],
-    "points": 1,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-48",
-    "name": "Golden-crowned Kinglet",
-    "habitats": ["forest"],
-    "foodCost": ["invertebrate"],
-    "points": 1,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-49",
-    "name": "Ruby-crowned Kinglet",
-    "habitats": ["forest"],
-    "foodCost": ["invertebrate"],
-    "points": 1,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-50",
-    "name": "Cedar Waxwing",
-    "habitats": ["forest"],
-    "foodCost": ["fruit"],
-    "points": 3,
-    "eggCapacity": 3
-  },
-  {
-    "id": "bird-51",
-    "name": "Yellow Warbler",
-    "habitats": ["wetlands", "forest"],
-    "foodCost": ["invertebrate"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-52",
-    "name": "Common Redpoll",
-    "habitats": ["grassland"],
-    "foodCost": ["seed"],
-    "points": 1,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-53",
-    "name": "Pine Grosbeak",
-    "habitats": ["forest"],
-    "foodCost": ["seed", "fruit"],
-    "points": 3,
-    "eggCapacity": 3
-  },
-  {
-    "id": "bird-54",
-    "name": "Evening Grosbeak",
-    "habitats": ["forest"],
-    "foodCost": ["seed", "fruit"],
-    "points": 3,
-    "eggCapacity": 3
-  },
-  {
-    "id": "bird-55",
-    "name": "Rose-breasted Grosbeak",
-    "habitats": ["forest"],
-    "foodCost": ["seed", "fruit", "invertebrate"],
-    "points": 4,
-    "eggCapacity": 3
-  },
-  {
-    "id": "bird-56",
-    "name": "Indigo Bunting",
-    "habitats": ["grassland"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-57",
-    "name": "Lazuli Bunting",
-    "habitats": ["grassland"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-58",
-    "name": "Painted Bunting",
-    "habitats": ["grassland"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 3,
-    "eggCapacity": 3
-  },
-  {
-    "id": "bird-59",
-    "name": "Dickcissel",
-    "habitats": ["grassland"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 2,
-    "eggCapacity": 4
-  },
-  {
-    "id": "bird-60",
-    "name": "Bobolink",
-    "habitats": ["grassland"],
-    "foodCost": ["seed", "invertebrate"],
-    "points": 2,
-    "eggCapacity": 4
+    "nestType": "ground",
+    "eggCapacity": 4,
+    "wingspan": 30,
+    "power": {
+      "type": "WHEN_ACTIVATED",
+      "effect": "When another player plays a [grassland] bird, tuck 1 [card] from your hand behind this bird."
+    }
   }
 ]

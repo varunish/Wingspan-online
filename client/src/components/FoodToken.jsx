@@ -5,7 +5,8 @@ const FOOD_COLORS = {
   seed: "#FFA726",
   fish: "#42A5F5",
   fruit: "#AB47BC",
-  rodent: "#8D6E63"
+  rodent: "#8D6E63",
+  wild: "#FFD700"  // Gold color for wild (any food)
 };
 
 const FOOD_ICONS = {
@@ -13,7 +14,8 @@ const FOOD_ICONS = {
   seed: "🌾",
   fish: "🐟",
   fruit: "🍒",
-  rodent: "🐭"
+  rodent: "🐭",
+  wild: "⭐"  // Star for wild (any food)
 };
 
 export function FoodToken({ type, size = 32, count = 1, style = {} }) {

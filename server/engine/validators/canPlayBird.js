@@ -1,4 +1,4 @@
-export function canPlayBird(game, player, bird, habitat) {
+export function canPlayBird(game, player, bird, habitat, wildFoodChoices = []) {
   if (game.turnManager.activePlayer !== player) {
     throw new Error("Not your turn");
   }
@@ -8,11 +8,32 @@ export function canPlayBird(game, player, bird, habitat) {
   }
 
   // Check food cost
-  bird.foodCost.forEach(f => {
-    if (!player.food[f] || player.food[f] <= 0) {
-      throw new Error(`Insufficient food: need ${f}`);
+  // Create a copy of player's food to track what's been used
+  const availableFood = { ...player.food };
+  
+  let wildChoiceIndex = 0;
+  for (const requiredFood of bird.foodCost) {
+    if (requiredFood === 'wild') {
+      // Wild means ANY food type - validate player's choice
+      const chosenFood = wildFoodChoices[wildChoiceIndex++];
+      
+      if (!chosenFood) {
+        throw new Error("Must specify which food to use for wild cost");
+      }
+      
+      if (!availableFood[chosenFood] || availableFood[chosenFood] <= 0) {
+        throw new Error(`Insufficient ${chosenFood} for wild food choice`);
+      }
+      
+      availableFood[chosenFood]--;
+    } else {
+      // Specific food type required
+      if (!availableFood[requiredFood] || availableFood[requiredFood] <= 0) {
+        throw new Error(`Insufficient food: need ${requiredFood}`);
+      }
+      availableFood[requiredFood]--;
     }
-  });
+  }
 
   // Check egg cost based on column position
   const habitatBirds = player.habitats[habitat];

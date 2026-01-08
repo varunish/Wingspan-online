@@ -18,7 +18,7 @@ export function LobbyScreen({ lobby, onStartGame }) {
   const handleJoinLobby = () => {
     if (playerName.trim() && lobbyCode.trim()) {
       socket.emit("joinLobby", {
-        lobbyId: lobbyCode.trim().toUpperCase(),
+        lobbyId: lobbyCode.trim().toLowerCase(),
         playerName: playerName.trim()
       });
     }
@@ -186,7 +186,7 @@ export function LobbyScreen({ lobby, onStartGame }) {
               <input
                 type="text"
                 value={lobbyCode}
-                onChange={(e) => setLobbyCode(e.target.value.toUpperCase())}
+                onChange={(e) => setLobbyCode(e.target.value)}
                 placeholder="Enter 6-digit code"
                 maxLength={6}
                 style={{

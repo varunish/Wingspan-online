@@ -27,16 +27,20 @@ io.on("connection", socket => {
   });
 
   socket.on("joinLobby", ({ lobbyId, playerName }) => {
-    const lobby = lobbies.get(lobbyId);
+    // Case-insensitive lobby lookup
+    const normalizedLobbyId = lobbyId.toLowerCase();
+    const lobby = lobbies.get(normalizedLobbyId);
     if (!lobby) return;
 
     lobby.players.push({ id: socket.id, name: playerName });
-    socket.join(lobbyId);
-    io.to(lobbyId).emit("lobbyUpdate", lobby);
+    socket.join(normalizedLobbyId);
+    io.to(normalizedLobbyId).emit("lobbyUpdate", lobby);
   });
 
   socket.on("startGame", ({ lobbyId }) => {
-    const lobby = lobbies.get(lobbyId);
+    // Case-insensitive lobby lookup
+    const normalizedLobbyId = lobbyId.toLowerCase();
+    const lobby = lobbies.get(normalizedLobbyId);
     if (!lobby) return;
 
     const game = new Game();
@@ -53,10 +57,10 @@ io.on("connection", socket => {
 
     // Emit to both lobbyId (for players still listening) and game.id (for safety)
     const gameState = game.serialize();
-    io.to(lobbyId).emit("gameStarted", { state: gameState });
+    io.to(normalizedLobbyId).emit("gameStarted", { state: gameState });
     io.to(game.id).emit("gameStarted", { state: gameState });
     
-    lobbies.delete(lobbyId);
+    lobbies.delete(normalizedLobbyId);
   });
 
   socket.on("confirmSetup", ({ gameId, keptBirdIds, bonusCardId }) => {
@@ -241,7 +245,7 @@ io.on("connection", socket => {
     socket.emit("actionSuccess", { message: `Drew ${count} cards successfully!` });
   });
 
-  socket.on("playBird", ({ gameId, birdId, habitat }) => {
+  socket.on("playBird", ({ gameId, birdId, habitat, wildFoodChoices = [] }) => {
     const game = games.get(gameId);
     if (!ensurePlayable(game)) {
       socket.emit("actionError", { error: "Game is not in playable state" });
@@ -260,7 +264,7 @@ io.on("connection", socket => {
     player.actionCubes -= 1;
 
     try {
-      PlayBird(game, player, birdId, habitat);
+      PlayBird(game, player, birdId, habitat, wildFoodChoices);
     } catch (e) {
       player.actionCubes += 1;
       socket.emit("actionError", { error: e.message });

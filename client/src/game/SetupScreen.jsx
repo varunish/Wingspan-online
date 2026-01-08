@@ -169,43 +169,63 @@ export function SetupScreen({ state, myPlayerId }) {
                   🎴 Select Bonus Card (Choose 1)
                 </h3>
                 <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-                  {bonusCards.map((card) => (
-                    <div
-                      key={card.id}
-                      onClick={() => setSelectedBonusCard(card.id)}
-                      style={{
-                        flex: "1 1 300px",
-                        padding: 20,
-                        border:
-                          selectedBonusCard === card.id
-                            ? "4px solid #FFD700"
-                            : "2px solid #e0e0e0",
-                        borderRadius: 12,
-                        backgroundColor:
-                          selectedBonusCard === card.id ? "#fffbea" : "#fff",
-                        cursor: "pointer",
-                        transition: "all 0.2s",
-                        boxShadow:
-                          selectedBonusCard === card.id
-                            ? "0 8px 16px rgba(255,215,0,0.3)"
-                            : "0 2px 8px rgba(0,0,0,0.1)"
-                      }}
-                    >
+                  {bonusCards.map((card) => {
+                    const bonusImagePath = `/assets/bonus/${card.id}.jpg`;
+                    return (
                       <div
+                        key={card.id}
+                        onClick={() => setSelectedBonusCard(card.id)}
                         style={{
-                          fontSize: "1.2em",
-                          fontWeight: "bold",
-                          marginBottom: 8,
-                          color: "#333"
+                          flex: "0 0 auto",
+                          width: 250,
+                          height: 350,
+                          border:
+                            selectedBonusCard === card.id
+                              ? "4px solid #FFD700"
+                              : "3px solid #333",
+                          borderRadius: 12,
+                          backgroundColor: "#fff",
+                          cursor: "pointer",
+                          transition: "all 0.2s",
+                          boxShadow:
+                            selectedBonusCard === card.id
+                              ? "0 8px 16px rgba(255,215,0,0.6)"
+                              : "0 4px 8px rgba(0,0,0,0.3)",
+                          overflow: "hidden",
+                          position: "relative",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
                         }}
                       >
-                        {card.name}
+                        <img
+                          src={bonusImagePath}
+                          alt={card.name}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "contain"
+                          }}
+                          onError={(e) => {
+                            // Fallback to text if image doesn't exist
+                            e.target.style.display = "none";
+                            const fallback = document.createElement("div");
+                            fallback.style.padding = "20px";
+                            fallback.style.textAlign = "center";
+                            fallback.innerHTML = `
+                              <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 8px; color: #333;">
+                                ${card.name}
+                              </div>
+                              <div style="color: #666; font-size: 0.95em;">
+                                ${card.description}
+                              </div>
+                            `;
+                            e.target.parentElement.appendChild(fallback);
+                          }}
+                        />
                       </div>
-                      <div style={{ color: "#666", fontSize: "0.95em" }}>
-                        {card.description}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
