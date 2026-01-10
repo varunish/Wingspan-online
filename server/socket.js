@@ -61,6 +61,41 @@ io.on("connection", socket => {
     io.to(normalizedLobbyId).emit("lobbyUpdate", lobby);
   });
 
+  socket.on("reconnectToGame", ({ lobbyId, playerName }) => {
+    // Case-insensitive lobby lookup
+    const normalizedLobbyId = lobbyId.toLowerCase();
+    const game = games.get(normalizedLobbyId);
+    
+    if (!game) {
+      socket.emit("reconnectError", { error: "Game not found" });
+      return;
+    }
+
+    // Find the player by name
+    const player = game.players.find(p => p.name === playerName);
+    if (!player) {
+      socket.emit("reconnectError", { error: "Player not found in game" });
+      return;
+    }
+
+    // Update the player's socket ID
+    const oldSocketId = player.id;
+    player.id = socket.id;
+
+    // Join the game room
+    socket.join(normalizedLobbyId);
+
+    // Notify the player they've reconnected
+    socket.emit("reconnectSuccess", { 
+      message: `Reconnected as ${playerName}`,
+      state: game.serialize()
+    });
+
+    // Notify other players
+    game.logs.push(`${playerName} reconnected`);
+    io.to(normalizedLobbyId).emit("stateUpdate", game.serialize());
+  });
+
   socket.on("startGame", ({ lobbyId }) => {
     // Case-insensitive lobby lookup
     const normalizedLobbyId = lobbyId.toLowerCase();
@@ -446,6 +481,31 @@ io.on("connection", socket => {
 
     io.to(game.id).emit("stateUpdate", game.serialize());
     socket.emit("actionSuccess", { message: "Discarded cards successfully!" });
+  });
+
+  // Handle player disconnect
+  socket.on("disconnect", () => {
+    // Find any active games this player is in
+    for (const [gameId, game] of games.entries()) {
+      const player = game.players.find(p => p.id === socket.id);
+      if (player) {
+        game.logs.push(`${player.name} disconnected`);
+        io.to(gameId).emit("stateUpdate", game.serialize());
+      }
+    }
+  });
+
+  // Handle manual leave
+  socket.on("leaveGame", () => {
+    // Remove session data (client will do this too)
+    // Just notify the game if player is in one
+    for (const [gameId, game] of games.entries()) {
+      const player = game.players.find(p => p.id === socket.id);
+      if (player) {
+        game.logs.push(`${player.name} left the game`);
+        io.to(gameId).emit("stateUpdate", game.serialize());
+      }
+    }
   });
 });
 

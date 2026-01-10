@@ -55,9 +55,19 @@ export class Game {
       // Draw 5 birds per player for setup
       p.setup.birds = this.deck.draw(5);
       
-      // Draw 2 bonus cards per player
+      // Draw 2 unique bonus cards per player
       const bonus1 = this.bonusDeck.draw();
-      const bonus2 = this.bonusDeck.draw();
+      let bonus2 = this.bonusDeck.draw();
+      
+      // Ensure bonus2 is different from bonus1 (same player shouldn't get duplicates)
+      let attempts = 0;
+      while (bonus2 && bonus1 && bonus2.id === bonus1.id && attempts < 10) {
+        // Put it back and draw another
+        this.bonusDeck.cards.push(bonus2);
+        bonus2 = this.bonusDeck.draw();
+        attempts++;
+      }
+      
       p.setup.bonusCards = [bonus1, bonus2].filter(b => b !== null && b !== undefined);
       
       p.food = {

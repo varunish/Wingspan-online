@@ -11,15 +11,34 @@ export function LobbyScreen({ lobby, onStartGame }) {
 
   const handleCreateLobby = () => {
     if (playerName.trim()) {
-      socket.emit("createLobby", { playerName: playerName.trim() });
+      const trimmedName = playerName.trim();
+      // Save player name for reconnection
+      localStorage.setItem("wingspan_playerName", trimmedName);
+      socket.emit("createLobby", { playerName: trimmedName });
+      
+      // Listen for lobby update to save lobby ID
+      const saveLobbyId = (updatedLobby) => {
+        if (updatedLobby && updatedLobby.id) {
+          localStorage.setItem("wingspan_lobbyId", updatedLobby.id);
+          socket.off("lobbyUpdate", saveLobbyId);
+        }
+      };
+      socket.on("lobbyUpdate", saveLobbyId);
     }
   };
 
   const handleJoinLobby = () => {
     if (playerName.trim() && lobbyCode.trim()) {
+      const trimmedName = playerName.trim();
+      const trimmedCode = lobbyCode.trim().toLowerCase();
+      
+      // Save session data for reconnection
+      localStorage.setItem("wingspan_playerName", trimmedName);
+      localStorage.setItem("wingspan_lobbyId", trimmedCode);
+      
       socket.emit("joinLobby", {
-        lobbyId: lobbyCode.trim().toLowerCase(),
-        playerName: playerName.trim()
+        lobbyId: trimmedCode,
+        playerName: trimmedName
       });
     }
   };

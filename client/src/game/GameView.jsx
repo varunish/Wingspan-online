@@ -4,6 +4,7 @@ import { PlayerBoard } from "./PlayerBoard.jsx";
 import { ActionPanel } from "./ActionPanel.jsx";
 import { TutorialOverlay } from "../tutorial/TutorialOverlay.jsx";
 import { playDingSound } from "../utils/sound.js";
+import { socket } from "../network/socket.js";
 
 export function GameView({ state, myPlayerId }) {
   // Defensive guards
@@ -30,8 +31,48 @@ export function GameView({ state, myPlayerId }) {
     prevActivePlayerIdRef.current = activePlayerId;
   }, [activePlayerId, myPlayerId]);
 
+  const handleLeaveGame = () => {
+    if (confirm("Are you sure you want to leave the game? You can reconnect later using the same lobby code.")) {
+      socket.emit("leaveGame");
+      localStorage.removeItem("wingspan_lobbyId");
+      localStorage.removeItem("wingspan_playerName");
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="game">
+      {/* ---- LEAVE BUTTON ---- */}
+      <button
+        onClick={handleLeaveGame}
+        style={{
+          position: "fixed",
+          top: "10px",
+          right: "10px",
+          zIndex: 1000,
+          padding: "8px 16px",
+          background: "#ff4444",
+          color: "white",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontSize: "14px",
+          fontWeight: "500",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+          transition: "all 0.2s"
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = "#cc0000";
+          e.target.style.transform = "scale(1.05)";
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = "#ff4444";
+          e.target.style.transform = "scale(1)";
+        }}
+      >
+        🚪 Leave Game
+      </button>
+
       {/* ---- TURN BANNER ---- */}
       <div className="turn-banner">
         {activePlayer
