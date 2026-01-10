@@ -1,9 +1,19 @@
+import { PowerParser } from "./PowerParser.js";
+
 export class WhenActivated {
   static execute({ bird, player, game }) {
     if (!bird.power || bird.power.type !== "WHEN_ACTIVATED") return null;
 
-    const effect = bird.power.effect;
-    const value = bird.power.value || 1;
+    // Parse the power text to get structured effect data
+    const parsed = PowerParser.parse(bird.power);
+    const effectType = parsed.effectType;
+    const params = parsed.params;
+
+    // Legacy support - check if effect is already a structured type
+    const effect = typeof bird.power.effect === 'string' && !bird.power.effect.includes(' ') 
+      ? bird.power.effect 
+      : effectType;
+    const value = bird.power.value || params.count || 1;
 
     let message = null;
     
@@ -83,8 +93,89 @@ export class WhenActivated {
         break;
       }
 
+      case "CONDITIONAL_TUCK": {
+        // Look at card from deck, tuck if wingspan < threshold
+        const maxWingspan = params.maxWingspan || 75;
+        const drawnCard = game.deck.draw();
+        if (drawnCard) {
+          const wingspan = drawnCard.wingspan || 0;
+          if (wingspan < maxWingspan) {
+            bird.tuckedCards = bird.tuckedCards || [];
+            bird.tuckedCards.push(drawnCard);
+            message = `⚡ ${bird.name} tucked ${drawnCard.name} (${wingspan}cm)!`;
+            game.logs.push(`${player.name} tucked ${drawnCard.name} under ${bird.name} (power activated)`);
+          } else {
+            game.logs.push(`${player.name} looked at ${drawnCard.name} (${wingspan}cm) but discarded it (power activated)`);
+            message = `⚡ ${bird.name} checked ${drawnCard.name} (${wingspan}cm) - too large, discarded`;
+          }
+        }
+        break;
+      }
+
+      case "TUCK_AND_LAY_EGG": {
+        // Tuck a card from hand and lay an egg
+        if (player.hand.length > 0) {
+          const tuckedCard = player.hand.pop();
+          bird.tuckedCards = bird.tuckedCards || [];
+          bird.tuckedCards.push(tuckedCard);
+          
+          const capacity = bird.eggCapacity || 6;
+          if (bird.eggs < capacity) {
+            bird.eggs += 1;
+            message = `⚡ ${bird.name} tucked a card and laid 1 egg!`;
+            game.logs.push(`${player.name} tucks a card under ${bird.name} and lays 1 egg (power activated)`);
+          } else {
+            message = `⚡ ${bird.name} tucked a card (no room for egg)!`;
+            game.logs.push(`${player.name} tucks a card under ${bird.name} (power activated)`);
+          }
+        }
+        break;
+      }
+
+      case "ALL_PLAYERS_DRAW": {
+        // All players draw cards
+        const count = params.count || 1;
+        game.players.forEach(p => {
+          const drawn = game.deck.draw(count);
+          if (Array.isArray(drawn)) {
+            p.hand.push(...drawn);
+          } else if (drawn) {
+            p.hand.push(drawn);
+          }
+          // Enforce hand limit
+          if (p.hand.length > 8) {
+            p.hand = p.hand.slice(0, 8);
+          }
+        });
+        message = `⚡ ${bird.name} caused all players to draw ${count} card(s)!`;
+        game.logs.push(`${player.name}'s ${bird.name} power: all players draw ${count} card(s)`);
+        break;
+      }
+
+      case "DRAW_BONUS_CARDS": {
+        // Draw bonus cards and keep one (not implemented yet - skip for now)
+        message = `⚡ ${bird.name} power (bonus cards not implemented yet)`;
+        game.logs.push(`${player.name}'s ${bird.name} power activated (not fully implemented)`);
+        break;
+      }
+
+      case "WHEN_OTHER_GAINS_FOOD":
+      case "WHEN_OTHER_LAYS_EGGS":
+      case "WHEN_OTHER_PLAYS_BIRD":
+      case "WHEN_OTHER_PREDATOR_SUCCEEDS":
+      case "BETWEEN_TURNS": {
+        // These are between-turn powers, not activated on player's own turn
+        // They should be handled by a different system
+        message = `⚡ ${bird.name} has a between-turn power (triggers on other players' actions)`;
+        game.logs.push(`${player.name}'s ${bird.name} power is active (between turns)`);
+        break;
+      }
+
+      case "CUSTOM":
+      case "UNKNOWN":
       default:
-        // Unknown power effect
+        // Unknown or custom power effect - log it but don't execute
+        game.logs.push(`${player.name}'s ${bird.name} power activated (effect not implemented: ${bird.power.effect})`);
         break;
     }
     

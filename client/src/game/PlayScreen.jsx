@@ -34,32 +34,24 @@ export function PlayScreen({ state, myPlayerId }) {
       />
       <div style={{ 
         display: "grid", 
-        gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 500px), 1fr))", 
-        gap: 12,
+        gridTemplateColumns: "1fr 400px", 
+        gap: 16,
         maxWidth: "1800px",
         margin: "0 auto"
       }}>
         <div style={{ minWidth: 0 }}>
-          {/* Round Goal Scoring Tracker & Shared Board - Side by Side */}
-          <div style={{ 
-            display: "grid", 
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 350px), 1fr))", 
-            gap: 12, 
-            marginBottom: 16 
-          }}>
-            <RoundGoalScorer
-              roundGoals={state.roundGoals || []}
-              players={state.players || []}
-              currentRound={state.round?.round || 1}
-            />
+          <RoundGoalScorer
+            roundGoals={state.roundGoals || []}
+            players={state.players || []}
+            currentRound={state.round?.round || 1}
+          />
 
-            <SharedBoard 
-              diceTray={state.diceTray} 
-              logs={state.logs}
-              round={state.round}
-              birdTray={state.birdTray}
-            />
-          </div>
+          <SharedBoard 
+            diceTray={state.diceTray} 
+            logs={state.logs}
+            round={state.round}
+            birdTray={state.birdTray}
+          />
 
           <PlayerBoard player={me} />
           {opponents.map(p => (
