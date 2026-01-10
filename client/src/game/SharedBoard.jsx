@@ -25,64 +25,67 @@ export function SharedBoard({ diceTray = [], logs = [], roundGoals = [], current
         🎲 Shared Board
       </h3>
 
-      {/* Food Dice Tray */}
-      <div style={{ marginBottom: 16 }}>
-        <strong style={{ display: "block", marginBottom: 8, fontSize: "1.1em" }}>
-          Food Dice Tray:
-        </strong>
-        <DiceTray dice={diceTray} />
-      </div>
+      {/* Food Dice Tray & Face-Up Birds - Side by Side */}
+      <div style={{ display: "flex", gap: 16, marginBottom: 16, flexWrap: "wrap" }}>
+        {/* Food Dice Tray */}
+        <div style={{ minWidth: 250 }}>
+          <strong style={{ display: "block", marginBottom: 8, fontSize: "1.1em" }}>
+            Food Dice Tray:
+          </strong>
+          <DiceTray dice={diceTray} />
+        </div>
 
-      {/* Face-Up Birds */}
-      <div style={{ marginBottom: 16 }}>
-        <strong
-          style={{
-            display: "block",
-            marginBottom: 8,
-            fontSize: "1.1em"
-          }}
-        >
-          🐦 Face-up Bird Tray:
-        </strong>
-        <div
-          style={{
-            display: "flex",
-            gap: 12,
-            overflowX: "auto",
-            padding: 8,
-            backgroundColor: "rgba(255,255,255,0.5)",
-            borderRadius: 8
-          }}
-        >
-          {birdTray && birdTray.length > 0 ? (
-            birdTray.map((bird, idx) =>
-              bird ? (
-                <BirdCard
-                  key={bird.instanceId || `${bird.id}-${idx}`}
-                  bird={bird}
-                  compact={false}
-                />
-              ) : (
-                <div
-                  key={idx}
-                  style={{
-                    width: 180,
-                    height: 250,
-                    border: "2px dashed #999",
-                    borderRadius: 12,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#999"
-                  }}
-                >
-                  Empty
-                </div>
+        {/* Face-Up Birds */}
+        <div style={{ flex: 1, minWidth: 300 }}>
+          <strong
+            style={{
+              display: "block",
+              marginBottom: 8,
+              fontSize: "1.1em"
+            }}
+          >
+            🐦 Face-up Bird Tray:
+          </strong>
+          <div
+            style={{
+              display: "flex",
+              gap: 12,
+              overflowX: "auto",
+              padding: 8,
+              backgroundColor: "rgba(255,255,255,0.5)",
+              borderRadius: 8
+            }}
+          >
+            {birdTray && birdTray.length > 0 ? (
+              birdTray.map((bird, idx) =>
+                bird ? (
+                  <BirdCard
+                    key={bird.instanceId || `${bird.id}-${idx}`}
+                    bird={bird}
+                    compact={false}
+                  />
+                ) : (
+                  <div
+                    key={idx}
+                    style={{
+                      width: 180,
+                      height: 250,
+                      border: "2px dashed #999",
+                      borderRadius: 12,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#999"
+                    }}
+                  >
+                    Empty
+                  </div>
+                )
               )
-            )
-          ) : (
-            <div style={{ color: "#999", padding: 8 }}>No birds available</div>
-          )}
+            ) : (
+              <div style={{ color: "#999", padding: 8 }}>No birds available</div>
+            )}
+          </div>
         </div>
       </div>
 

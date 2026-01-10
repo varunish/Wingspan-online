@@ -4,6 +4,9 @@ import { DiceTray } from "./DiceTray.js";
 import { Player } from "./Player.js";
 import { TurnManager } from "./TurnManager.js";
 import { RoundGoalEngine } from "./RoundGoalEngine.js";
+import { GameEvents } from "./Powers/GameEvents.js";
+import { EndOfRound } from "./Powers/EndOfRound.js";
+import { EndOfGame } from "./Powers/EndOfGame.js";
 import { uid } from "../utils/uid.js";
 import { shuffle } from "../utils/shuffle.js";
 import fs from "fs";
@@ -26,6 +29,7 @@ export class Game {
     this.bonusDeck = new BonusDeck();
     this.diceTray = new DiceTray();
     this.turnManager = new TurnManager();
+    this.events = new GameEvents();
 
     // Select 4 random round goals for the game
     const goalsFile = path.join(__dirname, "../../data/round_goals.json");
@@ -85,6 +89,9 @@ export class Game {
     this.players.forEach(p => (p.actionCubes = cubes));
     this.turnManager.reset(this.players);
     this.logs.push(`Round ${this.round.round} started`);
+    
+    // Register all between-turn powers at the start of each round
+    this.events.registerBetweenTurnPowers(this);
   }
 
   endRound() {
@@ -101,6 +108,10 @@ export class Game {
         this.logs.push(`${player.name} scored ${points} points for round goal`);
       });
     }
+
+    // Execute END_OF_ROUND powers
+    const endOfRoundActivations = EndOfRound.executeAll(this);
+    return endOfRoundActivations;
   }
 
   refillBirdTray() {

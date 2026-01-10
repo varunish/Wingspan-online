@@ -11,6 +11,8 @@ import { PlayBird } from "./engine/Actions/PlayBird.js";
 import { ExchangeResource } from "./engine/Actions/ExchangeResource.js";
 import { ConvertFood } from "./engine/Actions/ConvertFood.js";
 import { ScoringEngine } from "./engine/ScoringEngine.js";
+import { WhenPlayed } from "./engine/Powers/WhenPlayed.js";
+import { EndOfGame } from "./engine/Powers/EndOfGame.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -187,20 +189,41 @@ io.on("connection", socket => {
     io.to(game.id).emit("stateUpdate", game.serialize());
   });
 
-  const ensurePlayable = game =>
-    game && game.phase === "PLAY" && game.turnManager.activePlayer;
+  const ensurePlayable = game => {
+    if (!game) return false;
+    // Allow actions during PLAY phase
+    if (game.phase === "PLAY" && game.turnManager.activePlayer) return true;
+    return false;
+  };
 
   function postActionAdvance(game) {
     // If everyone is out of cubes, advance round or end game
     const allOut = game.players.every(p => p.actionCubes === 0);
     if (allOut) {
-      // Score the round goal
-      game.endRound();
+      // Score the round goal and execute END_OF_ROUND powers
+      const endOfRoundActivations = game.endRound() || [];
+      
+      // Emit END_OF_ROUND power activations
+      if (endOfRoundActivations.length > 0) {
+        endOfRoundActivations.forEach(activation => {
+          io.to(game.id).emit("powerActivated", activation);
+        });
+      }
       
       if (game.round.round >= game.round.maxRounds) {
+        // Execute END_OF_GAME powers before final scoring
+        const endOfGameActivations = EndOfGame.executeAll(game);
+        
         game.phase = "END";
         game.finalScores = ScoringEngine.scoreGame(game.players);
         game.logs.push("Game Over! Final scores calculated.");
+        
+        // Emit END_OF_GAME power activations
+        if (endOfGameActivations.length > 0) {
+          endOfGameActivations.forEach(activation => {
+            io.to(game.id).emit("powerActivated", activation);
+          });
+        }
         return;
       }
       
@@ -250,12 +273,23 @@ io.on("connection", socket => {
       return;
     }
 
+    // Emit event for between-turn powers
+    const betweenTurnActivations = game.events.emit('PLAYER_GAINS_FOOD', {
+      playerId: player.id,
+      playerName: player.name,
+      habitat: habitat,
+      foodTypes: foodTypes
+    });
+    
+    // Combine all power activations
+    const allActivations = [...powerActivations, ...betweenTurnActivations].filter(Boolean);
+
     postActionAdvance(game);
     io.to(game.id).emit("stateUpdate", game.serialize());
     
     // Emit power activations to all players in the game
-    if (powerActivations.length > 0) {
-      powerActivations.forEach(activation => {
+    if (allActivations.length > 0) {
+      allActivations.forEach(activation => {
         io.to(game.id).emit("powerActivated", activation);
       });
     }
@@ -290,12 +324,23 @@ io.on("connection", socket => {
       return;
     }
 
+    // Emit event for between-turn powers
+    const betweenTurnActivations = game.events.emit('PLAYER_LAYS_EGGS', {
+      playerId: player.id,
+      playerName: player.name,
+      habitat: habitat,
+      eggCount: birdIds.length
+    });
+    
+    // Combine all power activations
+    const allActivations = [...powerActivations, ...betweenTurnActivations].filter(Boolean);
+
     postActionAdvance(game);
     io.to(game.id).emit("stateUpdate", game.serialize());
     
     // Emit power activations to all players in the game
-    if (powerActivations.length > 0) {
-      powerActivations.forEach(activation => {
+    if (allActivations.length > 0) {
+      allActivations.forEach(activation => {
         io.to(game.id).emit("powerActivated", activation);
       });
     }
@@ -369,9 +414,41 @@ io.on("connection", socket => {
       return;
     }
 
+    const bird = player.habitats[habitat][player.habitats[habitat].length - 1];
+    const powerActivations = [];
+
+    // Execute WHEN_PLAYED power
+    if (bird && bird.power && bird.power.type === 'WHEN_PLAYED') {
+      const activation = WhenPlayed.execute({ bird, player, game });
+      if (activation) {
+        powerActivations.push(activation);
+      }
+    }
+
+    // Emit event for between-turn powers
+    const betweenTurnActivations = game.events.emit('PLAYER_PLAYS_BIRD', {
+      playerId: player.id,
+      playerName: player.name,
+      habitat: habitat,
+      birdName: bird?.name
+    });
+    
+    // Combine all power activations
+    const allActivations = [...powerActivations, ...betweenTurnActivations].filter(Boolean);
+    
+    // Re-register between-turn powers (new bird may have them)
+    game.events.registerBetweenTurnPowers(game);
+
     postActionAdvance(game);
     io.to(game.id).emit("stateUpdate", game.serialize());
-    const bird = player.habitats[habitat][player.habitats[habitat].length - 1];
+    
+    // Emit power activations to all players in the game
+    if (allActivations.length > 0) {
+      allActivations.forEach(activation => {
+        io.to(game.id).emit("powerActivated", activation);
+      });
+    }
+    
     socket.emit("actionSuccess", { message: `Played ${bird?.name || "bird"} successfully!` });
   });
 
