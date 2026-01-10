@@ -1,5 +1,6 @@
 import { SetupScreen } from "./SetupScreen.jsx";
 import { PlayScreen } from "./PlayScreen.jsx";
+import { DiscardScreen } from "./DiscardScreen.jsx";
 import { GameOverScreen } from "./GameOverScreen.jsx";
 
 export function GameShell({ state, myPlayerId }) {
@@ -13,9 +14,13 @@ export function GameShell({ state, myPlayerId }) {
     return <PlayScreen state={state} myPlayerId={myPlayerId} />;
   }
 
+  if (state.phase === "DISCARD") {
+    return <DiscardScreen state={state} myPlayerId={myPlayerId} />;
+  }
+
   if (state.phase === "END") {
     return <GameOverScreen finalScores={state.finalScores} players={state.players} />;
   }
 
-  return <div>Unknown game phase</div>;
+  return <div>Unknown game phase: {state.phase}</div>;
 }

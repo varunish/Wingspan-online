@@ -30,14 +30,20 @@ export function ActionPanel({ state, myPlayerId }) {
       showSuccess(message);
     };
 
+    const handlePowerActivated = ({ playerName, birdName, message }) => {
+      showInfo(message);
+    };
+
     socket.on("actionError", handleActionError);
     socket.on("actionSuccess", handleActionSuccess);
+    socket.on("powerActivated", handlePowerActivated);
 
     return () => {
       socket.off("actionError", handleActionError);
       socket.off("actionSuccess", handleActionSuccess);
+      socket.off("powerActivated", handlePowerActivated);
     };
-  }, [showError, showSuccess]);
+  }, [showError, showSuccess, showInfo]);
 
   const forestStrength = (me?.habitats.forest.length ?? 0) + 1;
   const grassStrength = (me?.habitats.grassland.length ?? 0) + 1;

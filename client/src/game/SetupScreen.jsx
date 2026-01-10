@@ -111,6 +111,55 @@ export function SetupScreen({ state, myPlayerId }) {
             </div>
           </div>
 
+          {/* Round Goals Display */}
+          {state.roundGoals && state.roundGoals.length > 0 && (
+            <div
+              style={{
+                marginBottom: 24,
+                padding: 20,
+                backgroundColor: "#fff3cd",
+                borderRadius: 8,
+                border: "2px solid #ffc107"
+              }}
+            >
+              <h3 style={{ margin: "0 0 16px 0", color: "#333" }}>
+                🏆 Round Goals for This Game
+              </h3>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                  gap: 12
+                }}
+              >
+                {state.roundGoals.map((goal, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      padding: 12,
+                      backgroundColor: "#fff",
+                      borderRadius: 8,
+                      border: "1px solid #e0e0e0"
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        color: "#667eea",
+                        marginBottom: 4
+                      }}
+                    >
+                      Round {idx + 1}
+                    </div>
+                    <div style={{ fontSize: "0.9em", color: "#333" }}>
+                      {goal.name || goal.description}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {!me.setup.confirmed ? (
             <>
               {/* Bird Selection */}

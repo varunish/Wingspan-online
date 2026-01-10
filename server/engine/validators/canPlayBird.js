@@ -36,7 +36,14 @@ export function canPlayBird(game, player, bird, habitat, wildFoodChoices = []) {
   }
 
   // Check egg cost based on column position
-  const habitatBirds = player.habitats[habitat];
+  // Normalize habitat name (wetland -> wetlands for consistency)
+  const normalizedHabitat = habitat === 'wetland' ? 'wetlands' : habitat;
+  const habitatBirds = player.habitats[normalizedHabitat];
+  
+  if (!habitatBirds) {
+    throw new Error(`Invalid habitat: ${habitat}`);
+  }
+  
   const columnIndex = habitatBirds.length;
   
   // First column (index 0) = no egg cost

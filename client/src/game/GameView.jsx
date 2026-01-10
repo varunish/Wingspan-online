@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { BoardView } from "./BoardView.jsx";
 import { PlayerBoard } from "./PlayerBoard.jsx";
 import { ActionPanel } from "./ActionPanel.jsx";
 import { TutorialOverlay } from "../tutorial/TutorialOverlay.jsx";
+import { playDingSound } from "../utils/sound.js";
 
-export function GameView({ state }) {
+export function GameView({ state, myPlayerId }) {
   // Defensive guards
   if (!state || !Array.isArray(state.players)) {
     return <div>Invalid game state</div>;
@@ -14,6 +15,20 @@ export function GameView({ state }) {
   const activePlayer = state.players.find(
     p => p.id === activePlayerId
   );
+  
+  // Track previous active player to detect turn changes
+  const prevActivePlayerIdRef = useRef(null);
+  
+  // Play ding sound when it becomes this player's turn
+  useEffect(() => {
+    if (activePlayerId && myPlayerId && activePlayerId === myPlayerId) {
+      // Only play sound if the turn actually changed (not on initial render)
+      if (prevActivePlayerIdRef.current !== null && prevActivePlayerIdRef.current !== activePlayerId) {
+        playDingSound();
+      }
+    }
+    prevActivePlayerIdRef.current = activePlayerId;
+  }, [activePlayerId, myPlayerId]);
 
   return (
     <div className="game">

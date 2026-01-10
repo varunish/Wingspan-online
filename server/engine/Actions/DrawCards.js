@@ -49,11 +49,17 @@ export function DrawCards(game, player, habitat, count, fromTray = []) {
   game.logs.push(`${player.name} drew ${actualDrawn} cards`);
 
   // Activate bird powers in wetlands habitat (right to left)
+  const powerActivations = [];
   const wetlandBirds = player.habitats.wetlands || [];
   for (let i = wetlandBirds.length - 1; i >= 0; i--) {
     const bird = wetlandBirds[i];
     if (bird.power?.type === "WHEN_ACTIVATED") {
-      PowerEngine.run("WHEN_ACTIVATED", { bird, player, game });
+      const activation = PowerEngine.run("WHEN_ACTIVATED", { bird, player, game });
+      if (activation) {
+        powerActivations.push(activation);
+      }
     }
   }
+  
+  return powerActivations;
 }

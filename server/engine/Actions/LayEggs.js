@@ -17,11 +17,17 @@ export function LayEggs(game, player, habitat, birdIds) {
   game.logs.push(`${player.name} laid ${birdIds.length} eggs`);
 
   // Activate bird powers in grassland habitat (right to left)
+  const powerActivations = [];
   const grasslandBirds = player.habitats.grassland || [];
   for (let i = grasslandBirds.length - 1; i >= 0; i--) {
     const bird = grasslandBirds[i];
     if (bird.power?.type === "WHEN_ACTIVATED") {
-      PowerEngine.run("WHEN_ACTIVATED", { bird, player, game });
+      const activation = PowerEngine.run("WHEN_ACTIVATED", { bird, player, game });
+      if (activation) {
+        powerActivations.push(activation);
+      }
     }
   }
+  
+  return powerActivations;
 }

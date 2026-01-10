@@ -168,6 +168,18 @@ io.on("connection", socket => {
         game.logs.push("Game Over! Final scores calculated.");
         return;
       }
+      
+      // Check if any player needs to discard cards (more than 5 in hand)
+      const needsDiscard = game.players.some(p => p.hand && p.hand.length > 5);
+      if (needsDiscard) {
+        game.phase = "DISCARD";
+        game.players.forEach(p => {
+          p.discardConfirmed = false;
+        });
+        game.logs.push("End of round: Players must discard down to 5 cards");
+        return;
+      }
+      
       game.round.round += 1;
       game.startRound();
       return;
@@ -194,8 +206,9 @@ io.on("connection", socket => {
     }
     player.actionCubes -= 1;
 
+    let powerActivations = [];
     try {
-      GainFood(game, player, habitat, foodTypes);
+      powerActivations = GainFood(game, player, habitat, foodTypes) || [];
     } catch (e) {
       player.actionCubes += 1;
       socket.emit("actionError", { error: e.message });
@@ -204,6 +217,14 @@ io.on("connection", socket => {
 
     postActionAdvance(game);
     io.to(game.id).emit("stateUpdate", game.serialize());
+    
+    // Emit power activations to all players in the game
+    if (powerActivations.length > 0) {
+      powerActivations.forEach(activation => {
+        io.to(game.id).emit("powerActivated", activation);
+      });
+    }
+    
     socket.emit("actionSuccess", { message: "Gained food successfully!" });
   });
 
@@ -225,8 +246,9 @@ io.on("connection", socket => {
     }
     player.actionCubes -= 1;
 
+    let powerActivations = [];
     try {
-      LayEggs(game, player, habitat, birdIds);
+      powerActivations = LayEggs(game, player, habitat, birdIds) || [];
     } catch (e) {
       player.actionCubes += 1;
       socket.emit("actionError", { error: e.message });
@@ -235,6 +257,14 @@ io.on("connection", socket => {
 
     postActionAdvance(game);
     io.to(game.id).emit("stateUpdate", game.serialize());
+    
+    // Emit power activations to all players in the game
+    if (powerActivations.length > 0) {
+      powerActivations.forEach(activation => {
+        io.to(game.id).emit("powerActivated", activation);
+      });
+    }
+    
     socket.emit("actionSuccess", { message: `Laid ${birdIds.length} eggs successfully!` });
   });
 
@@ -256,8 +286,9 @@ io.on("connection", socket => {
     }
     player.actionCubes -= 1;
 
+    let powerActivations = [];
     try {
-      DrawCards(game, player, habitat, count, fromTray || []);
+      powerActivations = DrawCards(game, player, habitat, count, fromTray || []) || [];
     } catch (e) {
       player.actionCubes += 1;
       socket.emit("actionError", { error: e.message });
@@ -266,6 +297,14 @@ io.on("connection", socket => {
 
     postActionAdvance(game);
     io.to(game.id).emit("stateUpdate", game.serialize());
+    
+    // Emit power activations to all players in the game
+    if (powerActivations.length > 0) {
+      powerActivations.forEach(activation => {
+        io.to(game.id).emit("powerActivated", activation);
+      });
+    }
+    
     socket.emit("actionSuccess", { message: `Drew ${count} cards successfully!` });
   });
 
@@ -347,6 +386,66 @@ io.on("connection", socket => {
 
     io.to(game.id).emit("stateUpdate", game.serialize());
     socket.emit("actionSuccess", { message: "Food conversion successful!" });
+  });
+
+  // End-of-round discard handler
+  socket.on("discardCards", ({ gameId, cardIds }) => {
+    const game = games.get(gameId);
+    if (!game) {
+      socket.emit("actionError", { error: "Game not found" });
+      return;
+    }
+
+    if (game.phase !== "DISCARD") {
+      socket.emit("actionError", { error: "Not in discard phase" });
+      return;
+    }
+
+    const player = game.getPlayer(socket.id);
+    if (!player) {
+      socket.emit("actionError", { error: "Player not found" });
+      return;
+    }
+
+    // Validate discard
+    if (!Array.isArray(cardIds)) {
+      socket.emit("actionError", { error: "Invalid card selection" });
+      return;
+    }
+
+    const cardsToDiscard = cardIds.length;
+    const finalHandSize = player.hand.length - cardsToDiscard;
+
+    if (finalHandSize > 5) {
+      socket.emit("actionError", { error: `Must discard to 5 cards. Currently would have ${finalHandSize} cards.` });
+      return;
+    }
+
+    if (finalHandSize < 5 && player.hand.length > 5) {
+      socket.emit("actionError", { error: "Cannot discard more than necessary" });
+      return;
+    }
+
+    // Perform discard
+    player.hand = player.hand.filter(card => !cardIds.includes(card.id));
+    player.discardConfirmed = true;
+    game.logs.push(`${player.name} discarded ${cardsToDiscard} card(s)`);
+
+    // Check if all players have confirmed discard
+    const allConfirmed = game.players.every(p => 
+      p.hand.length <= 5 || p.discardConfirmed
+    );
+
+    if (allConfirmed) {
+      // All players have discarded, start next round
+      game.phase = "PLAY";
+      game.round.round += 1;
+      game.startRound();
+      game.logs.push(`Round ${game.round.round} started`);
+    }
+
+    io.to(game.id).emit("stateUpdate", game.serialize());
+    socket.emit("actionSuccess", { message: "Discarded cards successfully!" });
   });
 });
 

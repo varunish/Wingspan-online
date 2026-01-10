@@ -24,7 +24,9 @@ export function PlayBird(game, player, birdId, habitat, wildFoodChoices = []) {
   });
 
   // Pay egg cost
-  const habitatBirds = player.habitats[habitat];
+  // Normalize habitat name (wetland -> wetlands for consistency)
+  const normalizedHabitat = habitat === 'wetland' ? 'wetlands' : habitat;
+  const habitatBirds = player.habitats[normalizedHabitat];
   const columnIndex = habitatBirds.length;
   const eggCost = Math.min(columnIndex, 3);
   
@@ -45,7 +47,7 @@ export function PlayBird(game, player, birdId, habitat, wildFoodChoices = []) {
   }
 
   const placedBird = { ...bird, eggs: 0 };
-  player.habitats[habitat].push(placedBird);
+  player.habitats[normalizedHabitat].push(placedBird);
   player.hand = player.hand.filter(b => b.id !== birdId);
 
   game.logs.push(`${player.name} played ${bird.name} in ${habitat}${eggCost > 0 ? ` (paid ${eggCost} eggs)` : ""}`);

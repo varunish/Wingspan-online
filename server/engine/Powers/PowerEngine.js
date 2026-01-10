@@ -7,19 +7,15 @@ export class PowerEngine {
   static run(type, context) {
     switch (type) {
       case "WHEN_PLAYED":
-        WhenPlayed.execute(context);
-        break;
+        return WhenPlayed.execute(context);
       case "WHEN_ACTIVATED":
-        WhenActivated.execute(context);
-        break;
+        return WhenActivated.execute(context);
       case "END_OF_ROUND":
-        EndOfRound.execute(context);
-        break;
+        return EndOfRound.execute(context);
       case "END_OF_GAME":
-        EndOfGame.execute(context);
-        break;
+        return EndOfGame.execute(context);
       default:
-        break;
+        return null;
     }
   }
 }

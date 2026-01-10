@@ -17,11 +17,17 @@ export function GainFood(game, player, habitat, foods) {
   game.logs.push(`${player.name} gained ${foods.length} food from Forest`);
 
   // Activate bird powers in forest habitat (right to left)
+  const powerActivations = [];
   const forestBirds = player.habitats.forest || [];
   for (let i = forestBirds.length - 1; i >= 0; i--) {
     const bird = forestBirds[i];
     if (bird.power?.type === "WHEN_ACTIVATED") {
-      PowerEngine.run("WHEN_ACTIVATED", { bird, player, game });
+      const activation = PowerEngine.run("WHEN_ACTIVATED", { bird, player, game });
+      if (activation) {
+        powerActivations.push(activation);
+      }
     }
   }
+  
+  return powerActivations;
 }
