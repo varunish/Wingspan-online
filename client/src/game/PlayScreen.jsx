@@ -52,23 +52,24 @@ export function PlayScreen({ state, myPlayerId }) {
         margin: "0 auto"
       }}>
         <div style={{ minWidth: 0 }}>
-          {/* Round Goal Scoring & Shared Board - Side by Side */}
-          <div style={{ display: "flex", gap: 16, marginBottom: 16, flexWrap: "wrap" }}>
-            <div style={{ flex: "1", minWidth: isMediumScreen ? "300px" : "200px" }}>
-              <RoundGoalScorer
-                roundGoals={state.roundGoals || []}
-                players={state.players || []}
-                currentRound={state.round?.round || 1}
-              />
-            </div>
-            <div style={{ flex: "1", minWidth: isMediumScreen ? "300px" : "200px" }}>
-              <SharedBoard 
-                diceTray={state.diceTray} 
-                logs={state.logs}
-                round={state.round}
-                birdTray={state.birdTray}
-              />
-            </div>
+          {/* Round Goal Scoring & Shared Board - Side by Side with EXACT same width */}
+          <div style={{ 
+            display: "grid", 
+            gridTemplateColumns: isMediumScreen ? "repeat(2, 1fr)" : "1fr",
+            gap: 16, 
+            marginBottom: 16 
+          }}>
+            <RoundGoalScorer
+              roundGoals={state.roundGoals || []}
+              players={state.players || []}
+              currentRound={state.round?.round || 1}
+            />
+            <SharedBoard 
+              diceTray={state.diceTray} 
+              logs={state.logs}
+              round={state.round}
+              birdTray={state.birdTray}
+            />
           </div>
 
           <PlayerBoard player={me} />

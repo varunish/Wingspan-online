@@ -18,8 +18,8 @@ export function RoundGoalScorer({ roundGoals, players, currentRound }) {
         padding: 16,
         backgroundColor: "#F5E6D3",
         boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-        height: "fit-content",
-        minHeight: "400px"
+        display: "flex",
+        flexDirection: "column"
       }}
     >
       <h3 style={{ margin: "0 0 16px 0", color: "#5D4037", fontSize: "1.3em" }}>

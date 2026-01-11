@@ -11,8 +11,6 @@ export function SharedBoard({ diceTray = [], logs = [], roundGoals = [], current
         padding: 16,
         backgroundColor: "#E8DCC4",
         boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-        height: "fit-content",
-        minHeight: "400px",
         display: "flex",
         flexDirection: "column"
       }}
