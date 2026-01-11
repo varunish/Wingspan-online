@@ -111,18 +111,24 @@ export function ActionPanel({ state, myPlayerId }) {
         />
       )}
       <div className="action-panel" data-highlight="ACTION_PANEL">
-        <h3><span className="action-section-icon">⚡</span> Actions</h3>
-        {!isMyTurn && <div className="waiting-message">⏳ Waiting for your turn…</div>}
+        <h3 style={{ fontSize: "1.5em" }}><span className="action-section-icon">⚡</span> Actions</h3>
+        {!isMyTurn && <div className="waiting-message" style={{ fontSize: "1.1em" }}>⏳ Waiting for your turn…</div>}
         {isMyTurn && (
           <>
-            <div className="action-cubes-header">
-              <div className="action-cubes-count">
+            <div className="action-cubes-header" style={{ 
+              display: "flex", 
+              flexDirection: "column", 
+              gap: "8px",
+              marginBottom: "12px" 
+            }}>
+              <div className="action-cubes-count" style={{ fontSize: "1.2em", fontWeight: "600" }}>
                 <span>🎲 Action cubes:</span>
-                <strong>{me?.actionCubes ?? 0}</strong>
+                <strong style={{ fontSize: "1.3em", marginLeft: "8px" }}>{me?.actionCubes ?? 0}</strong>
               </div>
               <button
                 onClick={() => setShowFoodConverter(true)}
                 className="action-button action-button-small action-button-secondary"
+                style={{ fontSize: "1em", padding: "8px 12px" }}
               >
                 🔄 Convert Food (2:1)
               </button>
@@ -133,7 +139,7 @@ export function ActionPanel({ state, myPlayerId }) {
             <div className="action-section-header">
               <span className="action-section-icon">🌲</span>
               <Tooltip text="Select food from the dice tray equal to your forest strength (1 + number of birds in forest)">
-                <span>Gain Food (Forest strength {forestStrength}) ℹ️</span>
+                <span style={{ fontSize: "1.1em", fontWeight: "600" }}>Gain Food (Forest strength {forestStrength}) ℹ️</span>
               </Tooltip>
             </div>
             <div className="food-dice-grid">
@@ -148,7 +154,7 @@ export function ActionPanel({ state, myPlayerId }) {
                 </div>
               ))}
             </div>
-            <div className="selection-counter">
+            <div className="selection-counter" style={{ fontSize: "1em" }}>
               Selected: {foodSelection.length} / {forestStrength}
             </div>
             <button
@@ -186,7 +192,7 @@ export function ActionPanel({ state, myPlayerId }) {
             <div className="action-section-header">
               <span className="action-section-icon">🥚</span>
               <Tooltip text="Lay eggs on your birds up to your grassland strength (1 + number of birds in grassland). Each bird has an egg capacity limit.">
-                <span>Lay Eggs (Grassland strength {grassStrength}) ℹ️</span>
+                <span style={{ fontSize: "1.1em", fontWeight: "600" }}>Lay Eggs (Grassland strength {grassStrength}) ℹ️</span>
               </Tooltip>
             </div>
             <div className="bird-selection-grid">
@@ -201,7 +207,7 @@ export function ActionPanel({ state, myPlayerId }) {
                 </button>
               ))}
             </div>
-            <div className="selection-counter">
+            <div className="selection-counter" style={{ fontSize: "1em" }}>
               Selected: {eggTargets.length} / {grassStrength}
             </div>
             <button 
@@ -240,7 +246,7 @@ export function ActionPanel({ state, myPlayerId }) {
             <div className="action-section-header">
               <span className="action-section-icon">💧</span>
               <Tooltip text="Draw cards from the deck or face-up tray equal to your wetlands strength (1 + number of birds in wetlands). Hand limit is 8 cards.">
-                <span>Draw Cards (Wetlands strength {wetlandStrength}) ℹ️</span>
+                <span style={{ fontSize: "1.1em", fontWeight: "600" }}>Draw Cards (Wetlands strength {wetlandStrength}) ℹ️</span>
               </Tooltip>
             </div>
             
@@ -351,7 +357,7 @@ export function ActionPanel({ state, myPlayerId }) {
           {/* Play Bird */}
           <div style={{ marginTop: 12 }}>
             <Tooltip text="Play a bird from your hand by paying its food cost. Birds beyond the first slot also cost eggs: Slot 1 (free), Slot 2-3 (1 egg each), Slot 4-5 (2 eggs each).">
-              <strong>Play Bird ℹ️</strong>
+              <strong style={{ fontSize: "1.1em" }}>Play Bird ℹ️</strong>
             </Tooltip>
             <div>
               <select

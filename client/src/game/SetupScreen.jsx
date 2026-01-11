@@ -14,7 +14,7 @@ export function SetupScreen({ state, myPlayerId }) {
   const availableBirds = (me.setup.birds || []).filter((b) => b);
   const bonusCards = me.setup.bonusCards || [];
   const maxKeep = 5;
-  const foodCost = maxKeep - selectedBirds.length;
+  const foodCost = selectedBirds.length; // Cost increases with each bird kept
 
   const toggleBird = (birdId) => {
     if (selectedBirds.includes(birdId)) {

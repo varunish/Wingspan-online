@@ -64,10 +64,11 @@ export class Game {
       let bonus2 = this.bonusDeck.draw();
       
       // Ensure bonus2 is different from bonus1 (same player shouldn't get duplicates)
+      // Compare by ID (base card type), not instanceId (which are always unique)
       let attempts = 0;
       while (bonus2 && bonus1 && bonus2.id === bonus1.id && attempts < 10) {
-        // Put it back and draw another
-        this.bonusDeck.cards.push(bonus2);
+        // Return card to deck and shuffle it back in properly
+        this.bonusDeck.returnCard(bonus2);
         bonus2 = this.bonusDeck.draw();
         attempts++;
       }

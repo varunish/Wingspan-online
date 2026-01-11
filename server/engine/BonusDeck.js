@@ -27,4 +27,12 @@ export class BonusDeck {
   draw() {
     return this.cards.pop();
   }
+
+  // Return a card to the deck and reshuffle
+  returnCard(card) {
+    if (card) {
+      this.cards.push(card);
+      this.cards = shuffle(this.cards);
+    }
+  }
 }
