@@ -68,13 +68,21 @@ export default function App() {
     };
 
     const handlePowerActivated = (data) => {
+      console.log('[App.jsx] Received powerActivated event:', data);
+      console.log('[App.jsx] requiresBonusCardSelection:', data.requiresBonusCardSelection);
+      console.log('[App.jsx] playerId:', data.playerId, 'socket.id:', socket.id);
+      console.log('[App.jsx] gameState?.id:', gameState?.id);
+      
       // Check if this power requires bonus card selection
       if (data.requiresBonusCardSelection && data.playerId === socket.id) {
+        console.log('[App.jsx] Setting bonus card selection state');
         setBonusCardSelection({
           gameId: gameState?.id,
           bonusCards: data.bonusCards,
           birdName: data.birdName
         });
+      } else {
+        console.log('[App.jsx] NOT showing bonus card selector - conditions not met');
       }
     };
 

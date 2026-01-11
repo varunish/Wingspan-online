@@ -4,16 +4,22 @@ export class WhenActivated {
   static execute({ bird, player, game }) {
     if (!bird.power || bird.power.type !== "WHEN_ACTIVATED") return null;
 
+    console.log(`[WhenActivated] Executing power for ${bird.name}:`, bird.power.effect);
+
     // Parse the power text to get structured effect data
     const parsed = PowerParser.parse(bird.power);
     const effectType = parsed.effectType;
     const params = parsed.params;
+
+    console.log(`[WhenActivated] Parsed effectType: ${effectType}, params:`, params);
 
     // Legacy support - check if effect is already a structured type
     const effect = typeof bird.power.effect === 'string' && !bird.power.effect.includes(' ') 
       ? bird.power.effect 
       : effectType;
     const value = bird.power.value || params.count || 1;
+
+    console.log(`[WhenActivated] Using effect: ${effect}, value: ${value}`);
 
     let message = null;
     
@@ -157,10 +163,15 @@ export class WhenActivated {
         const drawCount = params.draw || 2;
         const drawnBonusCards = [];
         
+        console.log(`[DRAW_BONUS_CARDS] Drawing ${drawCount} bonus cards for ${bird.name}`);
+        
         for (let i = 0; i < drawCount; i++) {
           const bonusCard = game.bonusDeck.draw();
           if (bonusCard) {
             drawnBonusCards.push(bonusCard);
+            console.log(`[DRAW_BONUS_CARDS] Drew bonus card: ${bonusCard.name || bonusCard.id}`);
+          } else {
+            console.log(`[DRAW_BONUS_CARDS] No more bonus cards in deck!`);
           }
         }
         
@@ -175,8 +186,7 @@ export class WhenActivated {
           message = `⚡ ${bird.name} drew ${drawnBonusCards.length} bonus card(s) - choose one to keep!`;
           game.logs.push(`${player.name}'s ${bird.name} power: drew ${drawnBonusCards.length} bonus cards to choose from`);
           
-          // Return special indicator that client needs to show selection UI
-          return {
+          const activationResult = {
             playerId: player.id,
             playerName: player.name,
             birdName: bird.name,
@@ -184,9 +194,15 @@ export class WhenActivated {
             requiresBonusCardSelection: true,
             bonusCards: drawnBonusCards
           };
+          
+          console.log(`[DRAW_BONUS_CARDS] Returning activation result:`, JSON.stringify(activationResult, null, 2));
+          
+          // Return special indicator that client needs to show selection UI
+          return activationResult;
         } else {
           message = `⚡ ${bird.name} tried to draw bonus cards, but none available!`;
           game.logs.push(`${player.name}'s ${bird.name} power: no bonus cards available`);
+          console.log(`[DRAW_BONUS_CARDS] No bonus cards drawn!`);
         }
         break;
       }

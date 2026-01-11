@@ -289,9 +289,13 @@ io.on("connection", socket => {
     
     // Emit power activations to all players in the game
     if (allActivations.length > 0) {
+      console.log(`[socket.js] Emitting ${allActivations.length} power activations`);
       allActivations.forEach(activation => {
+        console.log(`[socket.js] Emitting powerActivated:`, JSON.stringify(activation, null, 2));
         io.to(game.id).emit("powerActivated", activation);
       });
+    } else {
+      console.log(`[socket.js] No power activations to emit`);
     }
     
     socket.emit("actionSuccess", { message: "Gained food successfully!" });

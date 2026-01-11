@@ -19,15 +19,24 @@ export function GainFood(game, player, habitat, foods) {
   // Activate bird powers in forest habitat (right to left)
   const powerActivations = [];
   const forestBirds = player.habitats.forest || [];
+  console.log(`[GainFood] Activating powers for ${forestBirds.length} forest birds`);
+  
   for (let i = forestBirds.length - 1; i >= 0; i--) {
     const bird = forestBirds[i];
+    console.log(`[GainFood] Checking bird ${i}: ${bird.name}, power type: ${bird.power?.type}`);
+    
     if (bird.power?.type === "WHEN_ACTIVATED") {
+      console.log(`[GainFood] Activating power for ${bird.name}`);
       const activation = PowerEngine.run("WHEN_ACTIVATED", { bird, player, game });
       if (activation) {
+        console.log(`[GainFood] Power activation result:`, JSON.stringify(activation, null, 2));
         powerActivations.push(activation);
+      } else {
+        console.log(`[GainFood] No activation returned for ${bird.name}`);
       }
     }
   }
   
+  console.log(`[GainFood] Total power activations: ${powerActivations.length}`);
   return powerActivations;
 }
