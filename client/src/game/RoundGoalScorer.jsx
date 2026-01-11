@@ -14,13 +14,15 @@ export function RoundGoalScorer({ roundGoals, players, currentRound }) {
     <div
       style={{
         border: "3px solid #8B4513",
-        borderRadius: 8,
+        borderRadius: 12,
         padding: 16,
         backgroundColor: "#F5E6D3",
-        marginBottom: 16
+        boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+        height: "fit-content",
+        minHeight: "400px"
       }}
     >
-      <h3 style={{ margin: "0 0 16px 0", color: "#5D4037" }}>
+      <h3 style={{ margin: "0 0 16px 0", color: "#5D4037", fontSize: "1.3em" }}>
         🏆 Round Goal Scoring
       </h3>
 

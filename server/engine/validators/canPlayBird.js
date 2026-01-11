@@ -13,7 +13,25 @@ export function canPlayBird(game, player, bird, habitat, wildFoodChoices = []) {
   
   let wildChoiceIndex = 0;
   for (const requiredFood of bird.foodCost) {
-    if (requiredFood === 'wild') {
+    // Handle OR costs (array of options, like ["seed", "fruit"] means seed OR fruit)
+    if (Array.isArray(requiredFood)) {
+      // This is an OR cost - player must have at least ONE of these options
+      const hasAnyOption = requiredFood.some(option => {
+        return availableFood[option] && availableFood[option] > 0;
+      });
+      
+      if (!hasAnyOption) {
+        throw new Error(`Insufficient food: need one of ${requiredFood.join(' or ')}`);
+      }
+      
+      // Deduct the first available option (player can choose in UI later)
+      for (const option of requiredFood) {
+        if (availableFood[option] && availableFood[option] > 0) {
+          availableFood[option]--;
+          break;
+        }
+      }
+    } else if (requiredFood === 'wild') {
       // Wild means ANY food type - validate player's choice
       const chosenFood = wildFoodChoices[wildChoiceIndex++];
       
@@ -27,7 +45,7 @@ export function canPlayBird(game, player, bird, habitat, wildFoodChoices = []) {
       
       availableFood[chosenFood]--;
     } else {
-      // Specific food type required
+      // Specific food type required (AND cost)
       if (!availableFood[requiredFood] || availableFood[requiredFood] <= 0) {
         throw new Error(`Insufficient food: need ${requiredFood}`);
       }

@@ -10,7 +10,16 @@ export function PlayBird(game, player, birdId, habitat, wildFoodChoices = []) {
   // Pay food cost
   let wildChoiceIndex = 0;
   bird.foodCost.forEach(f => {
-    if (f === 'wild') {
+    // Handle OR costs (array of options, like ["seed", "fruit"] means seed OR fruit)
+    if (Array.isArray(f)) {
+      // This is an OR cost - deduct the first available option
+      for (const option of f) {
+        if (player.food[option] && player.food[option] > 0) {
+          player.food[option]--;
+          break;
+        }
+      }
+    } else if (f === 'wild') {
       // Wild means ANY food type - use player's choice
       const chosenFood = wildFoodChoices[wildChoiceIndex++];
       if (!chosenFood || !player.food[chosenFood] || player.food[chosenFood] <= 0) {
@@ -18,7 +27,7 @@ export function PlayBird(game, player, birdId, habitat, wildFoodChoices = []) {
       }
       player.food[chosenFood]--;
     } else {
-      // Specific food type
+      // Specific food type (AND cost)
       player.food[f]--;
     }
   });
