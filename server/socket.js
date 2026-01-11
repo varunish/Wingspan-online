@@ -414,7 +414,16 @@ io.on("connection", socket => {
       return;
     }
 
-    const bird = player.habitats[habitat][player.habitats[habitat].length - 1];
+    // Normalize habitat name (wetland -> wetlands for consistency)
+    const normalizedHabitat = habitat === 'wetland' ? 'wetlands' : habitat;
+    const habitatBirds = player.habitats[normalizedHabitat];
+    
+    if (!habitatBirds || habitatBirds.length === 0) {
+      socket.emit("actionError", { error: "Bird was not placed correctly" });
+      return;
+    }
+    
+    const bird = habitatBirds[habitatBirds.length - 1];
     const powerActivations = [];
 
     // Execute WHEN_PLAYED power
