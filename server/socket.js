@@ -560,6 +560,57 @@ io.on("connection", socket => {
     socket.emit("actionSuccess", { message: "Discarded cards successfully!" });
   });
 
+  // Handle bonus card selection (from bird power)
+  socket.on("selectBonusCard", ({ gameId, selectedCardId }) => {
+    const game = games.get(gameId);
+    if (!game) {
+      socket.emit("actionError", { error: "Game not found" });
+      return;
+    }
+
+    const player = game.getPlayer(socket.id);
+    if (!player) {
+      socket.emit("actionError", { error: "Player not found" });
+      return;
+    }
+
+    // Check if there's a pending bonus card selection
+    if (!game.pendingBonusCardSelection || game.pendingBonusCardSelection.playerId !== player.id) {
+      socket.emit("actionError", { error: "No pending bonus card selection" });
+      return;
+    }
+
+    const { cards, birdName } = game.pendingBonusCardSelection;
+    const selectedCard = cards.find(c => (c.instanceId || c.id) === selectedCardId);
+
+    if (!selectedCard) {
+      socket.emit("actionError", { error: "Invalid card selection" });
+      return;
+    }
+
+    // Add selected card to player's bonus cards
+    if (!player.bonusCards) {
+      player.bonusCards = [];
+    }
+    player.bonusCards.push(selectedCard);
+
+    // Return non-selected cards to bonus deck
+    cards.forEach(card => {
+      if ((card.instanceId || card.id) !== selectedCardId) {
+        game.bonusDeck.returnCard(card);
+      }
+    });
+
+    game.logs.push(`${player.name} selected a bonus card from ${birdName}'s power`);
+
+    // Clear pending selection
+    delete game.pendingBonusCardSelection;
+
+    io.to(game.id).emit("stateUpdate", game.serialize());
+    socket.emit("actionSuccess", { message: "Bonus card selected successfully!" });
+    socket.emit("bonusCardSelected", { card: selectedCard });
+  });
+
   // Handle player disconnect
   socket.on("disconnect", () => {
     // Find any active games this player is in

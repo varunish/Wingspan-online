@@ -153,9 +153,41 @@ export class WhenActivated {
       }
 
       case "DRAW_BONUS_CARDS": {
-        // Draw bonus cards and keep one (not implemented yet - skip for now)
-        message = `⚡ ${bird.name} power (bonus cards not implemented yet)`;
-        game.logs.push(`${player.name}'s ${bird.name} power activated (not fully implemented)`);
+        // Draw bonus cards and let player choose one to keep
+        const drawCount = params.draw || 2;
+        const drawnBonusCards = [];
+        
+        for (let i = 0; i < drawCount; i++) {
+          const bonusCard = game.bonusDeck.draw();
+          if (bonusCard) {
+            drawnBonusCards.push(bonusCard);
+          }
+        }
+        
+        if (drawnBonusCards.length > 0) {
+          // Store the drawn cards in game state for player to choose from
+          game.pendingBonusCardSelection = {
+            playerId: player.id,
+            cards: drawnBonusCards,
+            birdName: bird.name
+          };
+          
+          message = `⚡ ${bird.name} drew ${drawnBonusCards.length} bonus card(s) - choose one to keep!`;
+          game.logs.push(`${player.name}'s ${bird.name} power: drew ${drawnBonusCards.length} bonus cards to choose from`);
+          
+          // Return special indicator that client needs to show selection UI
+          return {
+            playerId: player.id,
+            playerName: player.name,
+            birdName: bird.name,
+            message: message,
+            requiresBonusCardSelection: true,
+            bonusCards: drawnBonusCards
+          };
+        } else {
+          message = `⚡ ${bird.name} tried to draw bonus cards, but none available!`;
+          game.logs.push(`${player.name}'s ${bird.name} power: no bonus cards available`);
+        }
         break;
       }
 

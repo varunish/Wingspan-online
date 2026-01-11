@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { socket } from "./network/socket.js";
 import { LobbyScreen } from "./components/LobbyScreen.jsx";
 import { GameShell } from "./game/GameShell.jsx";
+import { BonusCardSelector } from "./game/BonusCardSelector.jsx";
 
 export default function App() {
   const [myPlayerId, setMyPlayerId] = useState(null);
   const [lobby, setLobby] = useState(null);
   const [gameState, setGameState] = useState(null);
   const [reconnecting, setReconnecting] = useState(false);
+  const [bonusCardSelection, setBonusCardSelection] = useState(null);
 
   useEffect(() => {
     const handleConnect = () => {
@@ -65,12 +67,29 @@ export default function App() {
       console.error("Reconnect failed:", error);
     };
 
+    const handlePowerActivated = (data) => {
+      // Check if this power requires bonus card selection
+      if (data.requiresBonusCardSelection && data.playerId === socket.id) {
+        setBonusCardSelection({
+          gameId: gameState?.id,
+          bonusCards: data.bonusCards,
+          birdName: data.birdName
+        });
+      }
+    };
+
+    const handleBonusCardSelected = () => {
+      setBonusCardSelection(null);
+    };
+
     socket.on("connect", handleConnect);
     socket.on("lobbyUpdate", handleLobbyUpdate);
     socket.on("gameStarted", handleGameStarted);
     socket.on("stateUpdate", handleStateUpdate);
     socket.on("reconnectSuccess", handleReconnectSuccess);
     socket.on("reconnectError", handleReconnectError);
+    socket.on("powerActivated", handlePowerActivated);
+    socket.on("bonusCardSelected", handleBonusCardSelected);
 
     // Set initial socket ID if already connected
     if (socket.connected) {
@@ -84,8 +103,10 @@ export default function App() {
       socket.off("stateUpdate", handleStateUpdate);
       socket.off("reconnectSuccess", handleReconnectSuccess);
       socket.off("reconnectError", handleReconnectError);
+      socket.off("powerActivated", handlePowerActivated);
+      socket.off("bonusCardSelected", handleBonusCardSelected);
     };
-  }, []);
+  }, [gameState]);
 
   // Show reconnecting screen
   if (reconnecting) {
@@ -110,10 +131,20 @@ export default function App() {
   // Show game if in progress
   if (gameState) {
     return (
-      <GameShell
-        state={gameState}
-        myPlayerId={myPlayerId}
-      />
+      <>
+        <GameShell
+          state={gameState}
+          myPlayerId={myPlayerId}
+        />
+        {bonusCardSelection && (
+          <BonusCardSelector
+            gameId={bonusCardSelection.gameId}
+            bonusCards={bonusCardSelection.bonusCards}
+            birdName={bonusCardSelection.birdName}
+            onClose={() => setBonusCardSelection(null)}
+          />
+        )}
+      </>
     );
   }
 
